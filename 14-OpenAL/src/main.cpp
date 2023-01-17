@@ -120,6 +120,9 @@ Model modelDartLegoRightLeg;
 Model modelLamp1;
 Model modelLamp2;
 Model modelLampPost2;
+// Guardrail
+Model modelGuardrail0;
+Model modelGuardrail1;
 // Hierba
 Model modelGrass;
 // Fountain
@@ -128,10 +131,10 @@ Model modelFountain;
 // Mayow
 Model mayowModelAnimate;
 // Terrain model instance
-Terrain terrain(-1, -1, 200, 16, "../Textures/heightmap.png");
+Terrain terrain(-1, -1, 200, 16, "../Textures/heightmap_2.png");
 
 GLuint textureCespedID, textureWallID, textureWindowID, textureHighwayID, textureLandingPadID;
-GLuint textureTerrainBackgroundID, textureTerrainRID, textureTerrainGID, textureTerrainBID, textureTerrainBlendMapID;
+GLuint textureTerrainBackgroundID, textureTerrainRID, textureAsfaltoID, textureTerrainBID, textureTerrainBlendMapID;
 GLuint textureParticleFountainID, textureParticleFireID, texId;
 GLuint skyboxTextureID;
 GLuint texturaActivaID;
@@ -205,6 +208,13 @@ std::vector<float> lamp1Orientation = { -17.0, -82.67, 23.70 };
 std::vector<glm::vec3> lamp2Position = { glm::vec3(-36.52, 0, -23.24),
 		glm::vec3(-52.73, 0, -3.90) };
 std::vector<float> lamp2Orientation = {21.37 + 90, -65.0 + 90};
+
+// Guardrails positions
+std::vector<glm::vec3> guardrailPosition = 
+{	glm::vec3(10.0, 0.0, 10.0), 
+	glm::vec3(15.0, 0.0, 15.0), 
+	glm::vec3(20.0, 0.0, 20.0) };
+std::vector<float> guardrailOrientation = { 0.0, 0.0, 0.0 };
 
 // Blending model unsorted
 std::map<std::string, glm::vec3> blendingUnsorted = {
@@ -598,6 +608,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelLampPost2.loadModel("../models/Street_Light/LampPost.obj");
 	modelLampPost2.setShader(&shaderMulLighting);
 
+	//Guardrail model
+	modelGuardrail0.loadModel("../models/guardrail/Guardrail.obj");
+	modelGuardrail0.setShader(&shaderMulLighting);
+
 	//Grass
 	modelGrass.loadModel("../models/grass/grassModel.obj");
 	modelGrass.setShader(&shaderMulLighting);
@@ -836,11 +850,11 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	textureTerrainBackground.freeImage(bitmap);
 
 	// Definiendo la textura a utilizar
-	Texture textureTerrainR("../Textures/mud.png");
+	Texture textureHojasSecas("../Textures/hojasSecas.png");
 	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
-	bitmap = textureTerrainR.loadImage();
+	bitmap = textureHojasSecas.loadImage();
 	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
-	data = textureTerrainR.convertToData(bitmap, imageWidth,
+	data = textureHojasSecas.convertToData(bitmap, imageWidth,
 			imageHeight);
 	// Creando la textura con id 1
 	glGenTextures(1, &textureTerrainRID);
@@ -865,19 +879,19 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	} else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
-	textureTerrainR.freeImage(bitmap);
+	textureHojasSecas.freeImage(bitmap);
 
 	// Definiendo la textura a utilizar
-	Texture textureTerrainG("../Textures/grassFlowers.png");
+	Texture textureAsfalto("../Textures/asfalto.png");
 	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
-	bitmap = textureTerrainG.loadImage();
+	bitmap = textureAsfalto.loadImage();
 	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
-	data = textureTerrainG.convertToData(bitmap, imageWidth,
+	data = textureAsfalto.convertToData(bitmap, imageWidth,
 			imageHeight);
 	// Creando la textura con id 1
-	glGenTextures(1, &textureTerrainGID);
+	glGenTextures(1, &textureAsfaltoID);
 	// Enlazar esa textura a una tipo de textura de 2D.
-	glBindTexture(GL_TEXTURE_2D, textureTerrainGID);
+	glBindTexture(GL_TEXTURE_2D, textureAsfaltoID);
 	// set the texture wrapping parameters
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // set texture wrapping to GL_REPEAT (default wrapping method)
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -897,14 +911,14 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	} else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
-	textureTerrainG.freeImage(bitmap);
+	textureAsfalto.freeImage(bitmap);
 
 	// Definiendo la textura a utilizar
-	Texture textureTerrainB("../Textures/path.png");
+	Texture texturePinturaAmarilla("../Textures/pinturaAmarilla.png");
 	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
-	bitmap = textureTerrainB.loadImage();
+	bitmap = texturePinturaAmarilla.loadImage();
 	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
-	data = textureTerrainB.convertToData(bitmap, imageWidth,
+	data = texturePinturaAmarilla.convertToData(bitmap, imageWidth,
 			imageHeight);
 	// Creando la textura con id 1
 	glGenTextures(1, &textureTerrainBID);
@@ -929,10 +943,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	} else
 		std::cout << "Failed to load texture" << std::endl;
 	// Libera la memoria de la textura
-	textureTerrainB.freeImage(bitmap);
+	texturePinturaAmarilla.freeImage(bitmap);
 
 	// Definiendo la textura a utilizar
-	Texture textureTerrainBlendMap("../Textures/blendMap.png");
+	Texture textureTerrainBlendMap("../Textures/blendMap2.png");
 	// Carga el mapa de bits (FIBITMAP es el tipo de dato de la libreria)
 	bitmap = textureTerrainBlendMap.loadImage(true);
 	// Convertimos el mapa de bits en un arreglo unidimensional de tipo unsigned char
@@ -1185,6 +1199,9 @@ void destroy() {
 	modelLamp1.destroy();
 	modelLamp2.destroy();
 	modelLampPost2.destroy();
+
+	modelGuardrail0.destroy();
+
 	modelGrass.destroy();
 	modelFountain.destroy();
 
@@ -1200,7 +1217,7 @@ void destroy() {
 	glDeleteTextures(1, &textureLandingPadID);
 	glDeleteTextures(1, &textureTerrainBackgroundID);
 	glDeleteTextures(1, &textureTerrainRID);
-	glDeleteTextures(1, &textureTerrainGID);
+	glDeleteTextures(1, &textureAsfaltoID);
 	glDeleteTextures(1, &textureTerrainBID);
 	glDeleteTextures(1, &textureTerrainBlendMapID);
 	glDeleteTextures(1, &textureParticleFountainID);
@@ -2138,6 +2155,9 @@ void prepareScene(){
 	modelLamp2.setShader(&shaderMulLighting);
 	modelLampPost2.setShader(&shaderMulLighting);
 
+	//Guardrails
+	modelGuardrail0.setShader(&shaderMulLighting);
+
 	//Grass
 	modelGrass.setShader(&shaderMulLighting);
 
@@ -2183,6 +2203,9 @@ void prepareDepthScene(){
 	modelLamp2.setShader(&shaderDepth);
 	modelLampPost2.setShader(&shaderDepth);
 
+	//Guardrials
+	modelGuardrail0.setShader(&shaderDepth);
+
 	//Grass
 	modelGrass.setShader(&shaderDepth);
 
@@ -2207,7 +2230,7 @@ void renderScene(bool renderParticles){
 	shaderTerrain.setInt("rTexture", 1);
 	// Se activa la textura de hierba
 	glActiveTexture(GL_TEXTURE2);
-	glBindTexture(GL_TEXTURE_2D, textureTerrainGID);
+	glBindTexture(GL_TEXTURE_2D, textureAsfaltoID);
 	shaderTerrain.setInt("gTexture", 2);
 	// Se activa la textura del camino
 	glActiveTexture(GL_TEXTURE3);
@@ -2250,6 +2273,15 @@ void renderScene(bool renderParticles){
 		modelLampPost2.setScale(glm::vec3(1.0, 1.0, 1.0));
 		modelLampPost2.setOrientation(glm::vec3(0, lamp2Orientation[i], 0));
 		modelLampPost2.render();
+	}
+
+	//Render the guarrails
+	for (int i = 0; i < guardrailPosition.size(); i++) {
+		guardrailPosition[i].y = terrain.getHeightTerrain(guardrailPosition[i].x, guardrailPosition[i].z);
+		modelGuardrail0.setPosition(guardrailPosition[i]);
+		modelGuardrail0.setScale(glm::vec3(0.5, 0.5, 0.5));
+		modelGuardrail0.setOrientation(glm::vec3(0, guardrailOrientation[i], 0));
+		modelGuardrail0.render();
 	}
 
 	// Grass
