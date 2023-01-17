@@ -1,3 +1,5 @@
+//Rafael
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 //glew include
