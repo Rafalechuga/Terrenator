@@ -209,12 +209,174 @@ std::vector<glm::vec3> lamp2Position = { glm::vec3(-36.52, 0, -23.24),
 		glm::vec3(-52.73, 0, -3.90) };
 std::vector<float> lamp2Orientation = {21.37 + 90, -65.0 + 90};
 
-// Guardrails positions
+// Guardrails positions 0
 std::vector<glm::vec3> guardrailPosition = 
-{	glm::vec3(10.0, 0.0, 10.0), 
-	glm::vec3(15.0, 0.0, 15.0), 
-	glm::vec3(20.0, 0.0, 20.0) };
-std::vector<float> guardrailOrientation = { 0.0, 0.0, 0.0 };
+{	glm::vec3(30.45, 3.0, 31.0), 
+	glm::vec3(43.22, 2.16, 31.0), 
+	glm::vec3(-48.32, 0.0, 56.24)
+};
+std::vector<float> guardrailOrientation = { 
+	0.0, 0.0, 
+	0.0 
+};
+
+// Guardrails positions 1
+// Distancia entre guardrails 12.62 | 6.31
+std::vector<glm::vec3> guardrailPosition1 =
+{ 
+	//Interior
+	glm::vec3(-26.24, 0.0, 31.0),
+	glm::vec3(-13.62, 0.0, 31.0),
+	glm::vec3(-1.0  , 0.0, 31.0), 
+	glm::vec3(11.62 , 0.0, 31.0),
+	glm::vec3(24.24 , 0.0, 31.0), //*
+	glm::vec3(36.86 , 0.0, 31.0),
+	glm::vec3(49.48 , 0.0, 31.0), //*
+
+	glm::vec3(55.79 , 0.0, 37.31),
+	glm::vec3(55.79 , 0.0, 49.93),
+	
+	glm::vec3(49.48 , 0.0, 56.24),
+	glm::vec3(36.86 , 0.0, 56.24),
+	glm::vec3(24.24 , 0.0, 56.24),
+	glm::vec3(11.62 , 0.0, 56.24),
+	glm::vec3(-1.0  , 0.0, 56.24),
+	glm::vec3(-13.62, 0.0, 56.24),
+	glm::vec3(-26.24, 0.0, 56.24),
+	glm::vec3(-38.86, 0.0, 56.24),
+
+	glm::vec3(-51.48, 0.0, 49.93),
+	glm::vec3(-51.48, 0.0, 37.31),
+	glm::vec3(-51.48, 0.0, 24.69),
+	glm::vec3(-51.48, 0.0, 12.07),
+	glm::vec3(-51.48, 0.0, -0.55),
+	glm::vec3(-51.48, 0.0, -13.17),
+	glm::vec3(-51.48, 0.0, -25.79),
+	glm::vec3(-51.48, 0.0, -38.41),
+	glm::vec3(-51.48, 0.0, -51.03),
+
+	glm::vec3(-45.17, 0.0, -57.34),
+	glm::vec3(-32.55, 0.0, -57.34),
+	glm::vec3(-19.93, 0.0, -57.34),
+	glm::vec3(-7.31, 0.0, -57.34),
+	glm::vec3( 5.31, 0.0, -57.34),
+	glm::vec3( 17.93, 0.0, -57.34),
+	glm::vec3( 30.55, 0.0, -57.34),
+	glm::vec3( 43.17, 0.0, -57.34),
+
+	glm::vec3( 49.48, 0.0, -51.03),
+	glm::vec3( 49.48, 0.0, -38.41),
+	glm::vec3( 49.48, 0.0, -32.10),
+
+	glm::vec3( 43.17, 0.0, -25.79),
+	glm::vec3( 30.55, 0.0, -25.79),
+	glm::vec3( 17.93, 0.0, -25.79),
+	glm::vec3(  5.31, 0.0, -25.79),
+	glm::vec3( -7.31, 0.0, -25.79),
+	glm::vec3(-19.93, 0.0, -25.79),
+	glm::vec3(-26.24, 0.0, -25.79),
+
+	glm::vec3(-32.55, 0.0, -19.48),
+	glm::vec3(-32.55, 0.0, -6.86),
+	glm::vec3(-32.55 , 0.0, 5.76),
+	glm::vec3(-32.55, 0.0, 18.38),
+	glm::vec3(-32.55, 0.0, 24.69),
+	
+	//Exterior
+
+	glm::vec3( -6.0, 0.0, 10.0),
+	glm::vec3(  6.62, 0.0, 10.0),
+	glm::vec3(  19.24, 0.0, 10.0),
+	glm::vec3(  31.86, 0.0, 10.0),
+	glm::vec3(  44.48, 0.0, 10.0),
+	glm::vec3(  57.1, 0.0, 10.0),
+	glm::vec3(  69.72, 0.0, 10.0),
+
+	glm::vec3(  76.03, 0.0, 16.31),
+	glm::vec3(76.03, 0.0, 28.93),
+	glm::vec3(76.03, 0.0, 41.51),
+	glm::vec3(76.03, 0.0, 54.17),
+	glm::vec3(76.03, 0.0, 66.79),
+	glm::vec3(76.03, 0.0, 73.1),
+
+	glm::vec3(69.72, 0.0, 79.41),
+	glm::vec3(57.1, 0.0, 79.41),
+	glm::vec3(44.48, 0.0, 79.41),
+	glm::vec3(31.86, 0.0, 79.41),
+	glm::vec3(19.24, 0.0, 79.41),
+	glm::vec3(6.62, 0.0, 79.41),
+	glm::vec3(-6, 0.0, 79.41),
+	glm::vec3(-18.62, 0.0, 79.41),
+	glm::vec3(-31.24, 0.0, 79.41),
+	glm::vec3(-43.83, 0.0, 79.41),
+	glm::vec3(-56.48, 0.0, 79.41),
+	glm::vec3(-62.79, 0.0, 79.41),
+
+	glm::vec3(-69.1, 0.0, 73.1),
+	glm::vec3(-69.1, 0.0, 60.48),
+	glm::vec3(-69.1, 0.0, 47.86),
+	glm::vec3(-69.1, 0.0, 35.24),
+	glm::vec3(-69.1, 0.0, 22.62),
+	glm::vec3(-69.1, 0.0, 10),
+	glm::vec3(-69.1, 0.0, -2.62),
+	glm::vec3(-69.1, 0.0, -15.24),
+	glm::vec3(-69.1, 0.0, -27.86),
+	glm::vec3(-69.1, 0.0, -40.48),
+	glm::vec3(-69.1, 0.0, -53.1),
+	glm::vec3(-69.1, 0.0, -65.72),
+	glm::vec3(-69.1, 0.0, -72.03),
+
+	glm::vec3(-62.79, 0.0, -78.34),
+	glm::vec3(-50.17, 0.0, -78.34),
+	glm::vec3(-37.55, 0.0, -78.34),
+	glm::vec3(-24.93, 0.0, -78.34),
+	glm::vec3(-12.31, 0.0, -78.34),
+	glm::vec3( -0.31, 0.0, -78.34),
+	glm::vec3( 12.62, 0.0, -78.34),
+	glm::vec3( 25.24, 0.0, -78.34),
+	glm::vec3( 37.86, 0.0, -78.34),
+	glm::vec3( 50.48, 0.0, -78.34),
+	glm::vec3( 63.1, 0.0, -78.34),
+	glm::vec3( 69.41, 0.0, -78.34),
+
+	glm::vec3( 75.72, 0.0, -72.03),
+	glm::vec3(75.72, 0.0, -59.41),
+	glm::vec3(75.72, 0.0, -46.79),
+	glm::vec3(75.72, 0.0, -34.17),
+	glm::vec3(75.72, 0.0, -21.55),
+	glm::vec3(75.72, 0.0, -8.93),
+
+	glm::vec3(69.41, 0.0, -2.62),
+	glm::vec3(56.79, 0.0, -2.62),
+	glm::vec3(44.17, 0.0, -2.62),
+	glm::vec3(31.55, 0.0, -2.62),
+	glm::vec3(18.93, 0.0, -2.62),
+	glm::vec3(6.31, 0.0, -2.62),
+	glm::vec3(-6.31, 0.0, -2.62),
+
+	glm::vec3(-12.62, 0.0, 3.69)
+};
+std::vector<float> guardrailOrientation1 = { 
+	//Interior
+	180.0, 180.0, 180.0, 180.0, 180.0, 180, 180.0,
+	-90.0, -90.0,
+	  0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+	 90.0,  90.0,  90.0,  90.0,  90.0,  90.0,  90.0,  90.0,  90.0,
+	180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0, 180.0,
+	 90.0,  90.0,  90.0,
+	  0.0,   0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+	 90.0,  90.0,  90.0,  90.0,  90.0,
+	 
+	 //Exterior
+	 0.0,    0.0,   0.0,   0.0,   0.0,   0.0,   0.0,
+   -90.0,  -90.0, -90.0, -90.0, -90.0, -90.0,
+  -180.0, -180.0,-180.0,-180.0, -180.0,-180.0,-180.0, -180.0,-180.0,-180.0, -180.0,-180.0,
+    90.0,   90.0,  90.0,   90.0,  90.0,  90.0,  90.0,   90.0,  90.0,  90.0,   90.0,  90.0,  90.0,
+	 0.0,    0.0,   0.0,    0.0,   0.0,    0.0,   0.0,    0.0,  0.0,   0.0,    0.0,   0.0,
+   -90.0,  -90.0, -90.0,  -90.0, -90.0,  -90.0,
+   180.0,  180.0, 180.0,  180.0, 180.0,  180.0, 180.0,
+    90.0
+};
 
 // Blending model unsorted
 std::map<std::string, glm::vec3> blendingUnsorted = {
@@ -611,6 +773,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//Guardrail model
 	modelGuardrail0.loadModel("../models/guardrail/Guardrail.obj");
 	modelGuardrail0.setShader(&shaderMulLighting);
+
+	//Guardrail model 1
+	modelGuardrail1.loadModel("../models/guardrail/GuardrailLargo.obj");
+	modelGuardrail1.setShader(&shaderMulLighting);
 
 	//Grass
 	modelGrass.loadModel("../models/grass/grassModel.obj");
@@ -1201,6 +1367,7 @@ void destroy() {
 	modelLampPost2.destroy();
 
 	modelGuardrail0.destroy();
+	modelGuardrail1.destroy();
 
 	modelGrass.destroy();
 	modelFountain.destroy();
@@ -1411,16 +1578,16 @@ bool processInput(bool continueApplication) {
 		modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(0.02, 0.0, 0.0));
 
 	if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
-		modelMatrixMayow = glm::rotate(modelMatrixMayow, glm::radians(1.0f), glm::vec3(0, 1, 0));
+		modelMatrixMayow = glm::rotate(modelMatrixMayow, glm::radians(4.0f), glm::vec3(0, 1, 0));
 		animationIndex = 0;
 	}else if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-		modelMatrixMayow = glm::rotate(modelMatrixMayow, glm::radians(-1.0f), glm::vec3(0, 1, 0));
+		modelMatrixMayow = glm::rotate(modelMatrixMayow, glm::radians(-4.0f), glm::vec3(0, 1, 0));
 		animationIndex = 0;
 	}if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
-		modelMatrixMayow = glm::translate(modelMatrixMayow, glm::vec3(0, 0, 0.02));
+		modelMatrixMayow = glm::translate(modelMatrixMayow, glm::vec3(0, 0, 0.52));
 		animationIndex = 0;
 	}else if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
-		modelMatrixMayow = glm::translate(modelMatrixMayow, glm::vec3(0, 0, -0.02));
+		modelMatrixMayow = glm::translate(modelMatrixMayow, glm::vec3(0, 0, -0.52));
 		animationIndex = 0;
 	}
 
@@ -2157,6 +2324,7 @@ void prepareScene(){
 
 	//Guardrails
 	modelGuardrail0.setShader(&shaderMulLighting);
+	modelGuardrail1.setShader(&shaderMulLighting);
 
 	//Grass
 	modelGrass.setShader(&shaderMulLighting);
@@ -2205,6 +2373,7 @@ void prepareDepthScene(){
 
 	//Guardrials
 	modelGuardrail0.setShader(&shaderDepth);
+	modelGuardrail1.setShader(&shaderDepth);
 
 	//Grass
 	modelGrass.setShader(&shaderDepth);
@@ -2282,6 +2451,15 @@ void renderScene(bool renderParticles){
 		modelGuardrail0.setScale(glm::vec3(0.5, 0.5, 0.5));
 		modelGuardrail0.setOrientation(glm::vec3(0, guardrailOrientation[i], 0));
 		modelGuardrail0.render();
+	}
+
+	//Render the guarrails
+	for (int i = 0; i < guardrailPosition1.size(); i++) {
+		guardrailPosition1[i].y = terrain.getHeightTerrain(guardrailPosition1[i].x, guardrailPosition1[i].z);
+		modelGuardrail1.setPosition(guardrailPosition1[i]);
+		modelGuardrail1.setScale(glm::vec3(0.5, 0.5, 0.5));
+		modelGuardrail1.setOrientation(glm::vec3(0, guardrailOrientation1[i], 0));
+		modelGuardrail1.render();
 	}
 
 	// Grass
