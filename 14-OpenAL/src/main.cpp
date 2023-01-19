@@ -106,6 +106,16 @@ Model modelLamboFrontLeftWheel;
 Model modelLamboFrontRightWheel;
 Model modelLamboRearLeftWheel;
 Model modelLamboRearRightWheel;
+
+// Terrenator
+Model modelTerrenator;
+Model modelTerrenatorFrontLeftWheel;
+Model modelTerrenatorFrontRightWheel;
+Model modelTerrenatorRearLeftWheel;
+Model modelTerrenatorRearRightWheel;
+Model modelTerrenatorVentana;
+
+
 // Dart lego
 Model modelDartLegoBody;
 Model modelDartLegoHead;
@@ -165,6 +175,7 @@ glm::mat4 modelMatrixAircraft = glm::mat4(1.0);
 glm::mat4 modelMatrixDart = glm::mat4(1.0f);
 glm::mat4 modelMatrixMayow = glm::mat4(1.0f);
 glm::mat4 modelMatrixFountain = glm::mat4(1.0f);
+glm::mat4 modelMatrixTerrenator = glm::mat4(1.0f);
 
 int animationIndex = 1;
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
@@ -569,6 +580,18 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelLamboRearLeftWheel.setShader(&shaderMulLighting);
 	modelLamboRearRightWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_rear_right_wheel.obj");
 	modelLamboRearRightWheel.setShader(&shaderMulLighting);
+
+	// Terrenator
+	modelTerrenator.loadModel("../models/Terrenator/Terrenator_chasis.obj");
+	modelTerrenator.setShader(&shaderMulLighting);
+	modelTerrenatorFrontLeftWheel.loadModel("../models/Terrenator/Terrenator_frontLeftWheel.obj");
+	modelTerrenatorFrontLeftWheel.setShader(&shaderMulLighting);
+	modelTerrenatorFrontRightWheel.loadModel("../models/Terrenator/Terrenator_frontRightWheel.obj");
+	modelTerrenatorFrontRightWheel.setShader(&shaderMulLighting);
+	modelTerrenatorRearLeftWheel.loadModel("../models/Terrenator/Terrenator_rearLeftWheel.obj");
+	modelTerrenatorRearLeftWheel.setShader(&shaderMulLighting);
+	modelTerrenatorRearRightWheel.loadModel("../models/Terrenator/Terrenator_rearRightWheel.obj");
+	modelTerrenatorRearRightWheel.setShader(&shaderMulLighting);
 
 	// Dart Lego
 	modelDartLegoBody.loadModel("../models/LegoDart/LeoDart_body.obj");
@@ -1187,6 +1210,12 @@ void destroy() {
 	modelLampPost2.destroy();
 	modelGrass.destroy();
 	modelFountain.destroy();
+	modelTerrenator.destroy();
+	modelTerrenatorFrontLeftWheel.destroy();
+	modelTerrenatorFrontRightWheel.destroy();
+	modelTerrenatorRearLeftWheel.destroy();
+	modelTerrenatorRearRightWheel.destroy();
+	
 
 	// Custom objects animate
 	mayowModelAnimate.destroy();
@@ -1434,6 +1463,8 @@ void applicationLoop() {
 
 	modelMatrixLambo = glm::translate(modelMatrixLambo, glm::vec3(23.0, 0.0, 0.0));
 
+	modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(20.0f, 2.0f, -5.0f));
+
 	modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(3.0, 0.0, 20.0));
 
 	modelMatrixMayow = glm::translate(modelMatrixMayow, glm::vec3(13.0f, 0.05f, -5.0f));
@@ -1483,10 +1514,15 @@ void applicationLoop() {
 		glm::mat4 projection = glm::perspective(glm::radians(45.0f),
 				(float) screenWidth / (float) screenHeight, 0.1f, 100.0f);
 
-		if(modelSelected == 1){
+		/*if(modelSelected == 1){
 			axis = glm::axis(glm::quat_cast(modelMatrixDart));
 			angleTarget = glm::angle(glm::quat_cast(modelMatrixDart));
 			target = modelMatrixDart[3];
+		}*/
+		if (modelSelected == 1) {
+			axis = glm::axis(glm::quat_cast(modelMatrixTerrenator));
+			angleTarget = glm::angle(glm::quat_cast(modelMatrixTerrenator));
+			target = modelMatrixTerrenator[3];
 		}
 		else{
 			axis = glm::axis(glm::quat_cast(modelMatrixMayow));
@@ -2122,6 +2158,13 @@ void prepareScene(){
 	modelLamboRearLeftWheel.setShader(&shaderMulLighting);
 	modelLamboRearRightWheel.setShader(&shaderMulLighting);
 
+	// Terrenator
+	modelTerrenator.setShader(&shaderMulLighting);
+	modelTerrenatorFrontLeftWheel.setShader(&shaderMulLighting);
+	modelTerrenatorFrontRightWheel.setShader(&shaderMulLighting);
+	modelTerrenatorRearLeftWheel.setShader(&shaderMulLighting);
+	modelTerrenatorRearRightWheel.setShader(&shaderMulLighting);
+
 	// Dart Lego
 	modelDartLegoBody.setShader(&shaderMulLighting);
 	modelDartLegoMask.setShader(&shaderMulLighting);
@@ -2166,6 +2209,13 @@ void prepareDepthScene(){
 	modelLamboFrontRightWheel.setShader(&shaderDepth);
 	modelLamboRearLeftWheel.setShader(&shaderDepth);
 	modelLamboRearRightWheel.setShader(&shaderDepth);
+
+	// Terrenator
+	modelTerrenator.setShader(&shaderDepth);
+	modelTerrenatorFrontLeftWheel.setShader(&shaderDepth);
+	modelTerrenatorFrontRightWheel.setShader(&shaderDepth);
+	modelTerrenatorRearLeftWheel.setShader(&shaderDepth);
+	modelTerrenatorRearRightWheel.setShader(&shaderDepth);
 
 	// Dart Lego
 	modelDartLegoBody.setShader(&shaderDepth);
@@ -2265,6 +2315,18 @@ void renderScene(bool renderParticles){
 	modelFountain.render(modelMatrixFountain);
 	glEnable(GL_CULL_FACE);
 
+	// Terrenator
+	glDisable(GL_CULL_FACE);
+	modelMatrixTerrenator[3][1] = terrain.getHeightTerrain(modelMatrixTerrenator[3][0], modelMatrixTerrenator[3][2]);
+	//modelMatrixTerrenator = glm::scale(modelMatrixTerrenator, glm::vec3(1.3, 1.3, 1.3));
+	glm::mat4 modelMatrixTerrenatorChasis = glm::mat4(modelMatrixTerrenator);
+	modelTerrenator.render(modelMatrixTerrenatorChasis);
+	modelTerrenatorFrontLeftWheel.render(modelMatrixTerrenatorChasis);
+	modelTerrenatorFrontRightWheel.render(modelMatrixTerrenatorChasis);
+	modelTerrenatorRearLeftWheel.render(modelMatrixTerrenatorChasis);
+	modelTerrenatorRearRightWheel.render(modelMatrixTerrenatorChasis);
+	glEnable(GL_CULL_FACE);
+
 	// Dart lego
 	// Se deshabilita el cull faces IMPORTANTE para la capa
 	glDisable(GL_CULL_FACE);
@@ -2332,6 +2394,8 @@ void renderScene(bool renderParticles){
 	mayowModelAnimate.setAnimationIndex(animationIndex);
 	mayowModelAnimate.render(modelMatrixMayowBody);
 
+	
+
 	/**********
 	 * Update the position with alpha objects
 	 */
@@ -2339,6 +2403,8 @@ void renderScene(bool renderParticles){
 	blendingUnsorted.find("aircraft")->second = glm::vec3(modelMatrixAircraft[3]);
 	// Update the lambo
 	blendingUnsorted.find("lambo")->second = glm::vec3(modelMatrixLambo[3]);
+	// Update the Terrenator
+	//blendingUnsorted.find("Terrenator")->second = glm::vec3(modelMatrixTerrenator[3]);
 	// Update the helicopter
 	blendingUnsorted.find("heli")->second = glm::vec3(modelMatrixHeli[3]);
 
@@ -2384,6 +2450,18 @@ void renderScene(bool renderParticles){
 			modelLamboRearRightWheel.render(modelMatrixLamboBlend);
 			// Se regresa el cull faces IMPORTANTE para las puertas
 		}
+		/*else if (it->second.first.compare("Terrenator") == 0) {
+			// Terrenator
+			glm::mat4 modelMatrixTerrenatorBlend = glm::mat4(modelMatrixTerrenator);
+			modelMatrixTerrenatorBlend[3][1] = terrain.getHeightTerrain(modelMatrixTerrenatorBlend[3][0], modelMatrixTerrenatorBlend[3][2]);
+			modelMatrixTerrenatorBlend = glm::scale(modelMatrixTerrenatorBlend, glm::vec3(1.3, 1.3, 1.3));
+			modelTerrenator.render(modelMatrixTerrenatorBlend);
+			glActiveTexture(GL_TEXTURE0);
+			modelTerrenatorFrontLeftWheel.render(modelMatrixTerrenatorBlend);
+			modelTerrenatorFrontRightWheel.render(modelMatrixTerrenatorBlend);
+			modelTerrenatorRearLeftWheel.render(modelMatrixTerrenatorBlend);
+			modelTerrenatorRearRightWheel.render(modelMatrixTerrenatorBlend);
+		}*/
 		else if(it->second.first.compare("heli") == 0){
 			// Helicopter
 			glm::mat4 modelMatrixHeliChasis = glm::mat4(modelMatrixHeli);
