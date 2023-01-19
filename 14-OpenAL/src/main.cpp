@@ -1331,6 +1331,20 @@ bool processInput(bool continueApplication) {
 				presionarOpcion = false;
 		}
 	}
+	const float* axes = nullptr;
+	const unsigned char* botones = nullptr;
+	//para control xbox one
+	int numeroAxes, numeroBotones;
+	if (glfwJoystickPresent(GLFW_JOYSTICK_1 == GLFW_TRUE)) {
+		axes = glfwGetJoystickAxes(GLFW_JOYSTICK_1, &numeroAxes);
+		botones = glfwGetJoystickButtons(GLFW_JOYSTICK_1, &numeroBotones);
+	}
+	else {
+		float auxAxes[2] = {};
+		axes = auxAxes;
+		unsigned char auxbotones[2] = {};
+		botones = auxbotones;
+	}
 
 	if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		camera->mouseMoveCamera(offsetX, 0.0, deltaTime);
@@ -1378,7 +1392,7 @@ bool processInput(bool continueApplication) {
 		availableSave = true;
 
 	//Terreneitor
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || axes[0] < -0.2f)){
 		modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(1.0f), glm::vec3(0, 1, 0));
 		rotWheelsX += 0.05;
 		rotWheelsY += 0.02;
@@ -1386,15 +1400,16 @@ bool processInput(bool continueApplication) {
 			rotWheelsY = 0.44f;
 		
 	}
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || axes[0] > 0.2f)) {
 		modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-1.0f), glm::vec3(0, 1, 0));
 		rotWheelsX -= 0.05;
 		rotWheelsY -= 0.02;
 		if (rotWheelsY < -0.44f)
 			rotWheelsY = -0.44f;
-	}if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+	}if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || botones[0] == GLFW_PRESS)) {
 		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 0.22));
-		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) &&!(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)) {
+		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) &&!(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			&& abs(axes[0]) < 0.02f) {
 			if (rotWheelsY < 0.0f)
 				rotWheelsY += 0.02;
 			if (rotWheelsY > 0.0f)
