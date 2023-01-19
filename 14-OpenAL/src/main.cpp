@@ -179,7 +179,7 @@ glm::mat4 modelMatrixTerrenator = glm::mat4(1.0f);
 
 int animationIndex = 1;
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
-int modelSelected = 2;
+int modelSelected = 1;
 bool enableCountSelected = true;
 
 // Variables to animations keyframes
@@ -212,6 +212,9 @@ float dorRotCount = 0.0;
 // giro Terrenator
 float rotWheelsX = 0.0;
 float rotWheelsY = 0.0;
+
+// Terrenator caida
+double inicioCaida = 0;
 
 // Lamps positions
 std::vector<glm::vec3> lamp1Position = { glm::vec3(-7.03, 0, -19.14), glm::vec3(
@@ -1379,18 +1382,25 @@ bool processInput(bool continueApplication) {
 		modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(1.0f), glm::vec3(0, 1, 0));
 		rotWheelsX += 0.05;
 		rotWheelsY += 0.02;
-		if (rotWheelsY > 0.3f)
-			rotWheelsY = 0.3f;
+		if (rotWheelsY > 0.44f)
+			rotWheelsY = 0.44f;
 		
 	}
 	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
 		modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-1.0f), glm::vec3(0, 1, 0));
 		rotWheelsX -= 0.05;
 		rotWheelsY -= 0.02;
-		if (rotWheelsY < -0.30f)
-			rotWheelsY = -0.30f;
+		if (rotWheelsY < -0.44f)
+			rotWheelsY = -0.44f;
 	}if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
 		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 0.22));
+		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) &&!(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)) {
+			if (rotWheelsY < 0.0f)
+				rotWheelsY += 0.02;
+			if (rotWheelsY > 0.0f)
+				rotWheelsY -= 0.02;
+
+		}
 	}
 	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, -0.02));
@@ -1561,8 +1571,10 @@ void applicationLoop() {
 			angleTarget = 0.0;
 		if(axis.y < 0)
 			angleTarget = -angleTarget;
-		if(modelSelected == 1)
-			angleTarget -= glm::radians(90.0f);
+		if (modelSelected == 1) {
+			angleTarget -= glm::radians(0.0f);
+			camera->setDistanceFromTarget(16.0f);
+		}
 		camera->setCameraTarget(target);
 		camera->setAngleTarget(angleTarget);
 		camera->updateCamera();
@@ -2354,9 +2366,16 @@ void renderScene(bool renderParticles){
 	modelMatrixTerrenator[1] = glm::vec4(ejeyTerrenator, 0.0f);
 	modelMatrixTerrenator[2] = glm::vec4(ejezTerrenator, 0.0f);
 
-	modelMatrixTerrenator[3][1] = terrain.getHeightTerrain(modelMatrixTerrenator[3][0], modelMatrixTerrenator[3][2]);
+	modelMatrixTerrenator[3][1] += -GRAVITY*(currTime - inicioCaida)* (currTime - inicioCaida);
+	if (modelMatrixTerrenator[3][1] < terrain.getHeightTerrain(modelMatrixTerrenator[3][0], modelMatrixTerrenator[3][2])) {
+		modelMatrixTerrenator[3][1] = terrain.getHeightTerrain(modelMatrixTerrenator[3][0], modelMatrixTerrenator[3][2]);
+		inicioCaida = currTime;
+	}
+	
+	//modelMatrixTerrenator[3][1] = terrain.getHeightTerrain(modelMatrixTerrenator[3][0], modelMatrixTerrenator[3][2]);
 	//modelMatrixTerrenator = glm::scale(modelMatrixTerrenator, glm::vec3(1.3, 1.3, 1.3));
 	glm::mat4 modelMatrixTerrenatorChasis = glm::mat4(modelMatrixTerrenator);
+	modelMatrixTerrenatorChasis = glm::scale(modelMatrixTerrenatorChasis, glm::vec3(0.5, 0.5, 0.5));
 	modelTerrenator.render(modelMatrixTerrenatorChasis);
 
 	glm::mat4 modelMatrixFrontLeftWheel = glm::mat4(modelMatrixTerrenatorChasis);
