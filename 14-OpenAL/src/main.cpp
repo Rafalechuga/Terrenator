@@ -2004,6 +2004,23 @@ void applicationLoop() {
 			std::get<0>(collidersOBB.find("lamp2-" + std::to_string(i))->second) = lampCollider;
 		}
 
+		// Guardrail colliders
+		for (int i = 0; i < guardrailPosition1.size(); i++) {
+			AbstractModel::OBB guardrailCollider;
+			glm::mat4 modelMatrixColliderGuardrail = glm::mat4(1.0);
+			modelMatrixColliderGuardrail = glm::translate(modelMatrixColliderGuardrail, guardrailPosition1[i]);
+			modelMatrixColliderGuardrail = glm::rotate(modelMatrixColliderGuardrail, glm::radians(guardrailOrientation1[i]),
+				glm::vec3(0, 1, 0));
+			addOrUpdateColliders(collidersOBB, "guardrail1-" + std::to_string(i), guardrailCollider, modelMatrixColliderGuardrail);
+			// Set the orientation of collider before doing the scale
+			guardrailCollider.u = glm::quat_cast(modelMatrixColliderGuardrail);
+			modelMatrixColliderGuardrail = glm::scale(modelMatrixColliderGuardrail, glm::vec3(0.5, 0.5, 0.5));
+			modelMatrixColliderGuardrail = glm::translate(modelMatrixColliderGuardrail, modelGuardrail1.getObb().c);
+			guardrailCollider.c = glm::vec3(modelMatrixColliderGuardrail[3]);
+			guardrailCollider.e = modelGuardrail1.getObb().e * glm::vec3(0.5, 0.5, 0.5);
+			std::get<0>(collidersOBB.find("guardrail1-" + std::to_string(i))->second) = guardrailCollider;
+		}
+
 		// Collider de mayow
 		AbstractModel::OBB mayowCollider;
 		glm::mat4 modelmatrixColliderMayow = glm::mat4(modelMatrixMayow);
