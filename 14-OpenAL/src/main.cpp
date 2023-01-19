@@ -131,6 +131,13 @@ Model modelFountain;
 Model mayowModelAnimate;
 //Model barrel
 Model modelBarrel;
+//Model wheels
+Model modelThreeWheels;
+//Model rock2
+Model modelRock2;
+
+
+
 // Terrain model instance
 Terrain terrain(-1, -1, 200, 16, "../Textures/heightmap.png");
 
@@ -170,6 +177,8 @@ glm::mat4 modelMatrixDart = glm::mat4(1.0f);
 glm::mat4 modelMatrixMayow = glm::mat4(1.0f);
 glm::mat4 modelMatrixFountain = glm::mat4(1.0f);
 glm::mat4 modelMatrixBarrel = glm::mat4(1.0f);
+glm::mat4 modelMatrixThreeWheels = glm::mat4(1.0f);
+glm::mat4 modelMatrixRock2 = glm::mat4(1.0f);
 
 int animationIndex = 1;
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
@@ -620,6 +629,14 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//Barrel
 	modelBarrel.loadModel("../models/Barrel/barrel.fbx");
 	modelBarrel.setShader(&shaderMulLighting);
+
+	//ThreeWheels
+	modelThreeWheels.loadModel("../models/llantas/MonsterTruckWheel.fbx");
+	modelThreeWheels.setShader(&shaderMulLighting);
+
+	//Rock2
+	modelRock2.loadModel("../models/rock/rock2/CavePlatform1_Fbx.fbx");
+	modelRock2.setShader(&shaderMulLighting);
 
 	camera->setPosition(glm::vec3(0.0, 0.0, 10.0));
 	camera->setDistanceFromTarget(distanceFromTarget);
@@ -1210,6 +1227,8 @@ void destroy() {
 	modelGrass.destroy();
 	modelFountain.destroy();
 	modelBarrel.destroy();
+	modelThreeWheels.destroy();
+	modelRock2.destroy();
 
 	// Custom objects animate
 	mayowModelAnimate.destroy();
@@ -1799,7 +1818,7 @@ void applicationLoop() {
 		aircraftCollider.u = glm::quat_cast(modelMatrixAircraft);
 		modelMatrixColliderAircraft = glm::scale(modelMatrixColliderAircraft,
 				glm::vec3(1.0, 1.0, 1.0));
-		modelMatrixColliderAircraft = glm::translate(															//------------------------------------------------------------------------------------
+		modelMatrixColliderAircraft = glm::translate(			
 				modelMatrixColliderAircraft, modelAircraft.getObb().c);
 		aircraftCollider.c = glm::vec3(modelMatrixColliderAircraft[3]);
 		aircraftCollider.e = modelAircraft.getObb().e * glm::vec3(1.0, 1.0, 1.0);
@@ -1812,11 +1831,24 @@ void applicationLoop() {
 		BarrelCollider.u = glm::quat_cast(modelMatrixBarrel);
 		modelmatrixColliderBarrel = glm::scale(modelmatrixColliderBarrel,
 			glm::vec3(2.0, 2.0, 5.0));
-		modelmatrixColliderBarrel = glm::translate(															//------------------------------------------------------------------------------------
+		modelmatrixColliderBarrel = glm::translate(							
 			modelmatrixColliderBarrel, glm::vec3(0.0, 1.0, 0.08));
 		BarrelCollider.c = glm::vec3(modelmatrixColliderBarrel[3]);
 		BarrelCollider.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
 		addOrUpdateColliders(collidersOBB, "barrel", BarrelCollider, modelMatrixBarrel);
+
+		//Collider de rock2
+		glm::mat4 modelmatrixColliderRock2 = glm::mat4(modelMatrixRock2);
+		AbstractModel::OBB Rock2Collider;
+		// Set the orientation of collider before doing the scale
+		Rock2Collider.u = glm::quat_cast(modelMatrixRock2);
+		modelmatrixColliderRock2 = glm::scale(modelmatrixColliderRock2,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderRock2 = glm::translate(
+			modelmatrixColliderRock2, glm::vec3(1.023515, 1.0, 9.446066));
+		Rock2Collider.c = glm::vec3(modelmatrixColliderRock2[3]);
+		Rock2Collider.e = modelRock2.getObb().e * glm::vec3(0.07, 0.08, 0.06);
+		addOrUpdateColliders(collidersOBB, "rock2", Rock2Collider, modelMatrixRock2);
 
 		//Collider del la rock
 		AbstractModel::SBB rockCollider;
@@ -2316,6 +2348,22 @@ void renderScene(bool renderParticles){
 	modelBarril = glm::rotate(modelBarril, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 	modelBarril = glm::scale(modelBarril, glm::vec3(1.0f, 1.0f, 1.0f));
 	modelBarrel.render(modelBarril);
+	glEnable(GL_CULL_FACE);
+
+	//ThreeWheels
+	glDisable(GL_CULL_FACE);
+	glm::mat4 model3Wheels = glm::mat4(modelMatrixThreeWheels);
+	model3Wheels = translate(model3Wheels, glm::vec3(0.023515, 8.0, 0.446066));
+	//model3Wheels = glm::scale(model3Wheels, glm::vec3(0.01f, 0.01f, 0.01f));
+	modelThreeWheels.render(model3Wheels);
+	glEnable(GL_CULL_FACE);
+
+	//Rock2
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelRocktwo = glm::mat4(modelMatrixRock2);
+	modelRocktwo = translate(modelRocktwo, glm::vec3(1.023515, 1.0, 10.446066));
+	modelRocktwo = glm::scale(modelRocktwo, glm::vec3(0.08f, 0.08f, 0.08f));
+	modelRock2.render(modelRocktwo);
 	glEnable(GL_CULL_FACE);
 
 	// Dart lego
