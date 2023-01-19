@@ -631,7 +631,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelBarrel.setShader(&shaderMulLighting);
 
 	//ThreeWheels
-	modelThreeWheels.loadModel("../models/llantas/MonsterTruckWheel.fbx");
+	modelThreeWheels.loadModel("../models/llantas/Car tire 2.obj");
 	modelThreeWheels.setShader(&shaderMulLighting);
 
 	//Rock2
@@ -1837,6 +1837,19 @@ void applicationLoop() {
 		BarrelCollider.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
 		addOrUpdateColliders(collidersOBB, "barrel", BarrelCollider, modelMatrixBarrel);
 
+		//Collider de llanta
+		glm::mat4 modelmatrixColliderWheels = glm::mat4(modelMatrixThreeWheels);
+		AbstractModel::OBB WheelsCollider;
+		// Set the orientation of collider before doing the scale
+		WheelsCollider.u = glm::quat_cast(modelMatrixThreeWheels);
+		modelmatrixColliderWheels = glm::scale(modelmatrixColliderWheels,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderWheels = glm::translate(
+			modelmatrixColliderWheels, glm::vec3(4.5, 2.0, -3.0));
+		WheelsCollider.c = glm::vec3(modelmatrixColliderWheels[3]);
+		WheelsCollider.e = modelThreeWheels.getObb().e * glm::vec3(0.09, 0.03, 0.07);
+		addOrUpdateColliders(collidersOBB, "wheels", WheelsCollider, modelMatrixThreeWheels);
+
 		//Collider de rock2
 		glm::mat4 modelmatrixColliderRock2 = glm::mat4(modelMatrixRock2);
 		AbstractModel::OBB Rock2Collider;
@@ -2353,8 +2366,9 @@ void renderScene(bool renderParticles){
 	//ThreeWheels
 	glDisable(GL_CULL_FACE);
 	glm::mat4 model3Wheels = glm::mat4(modelMatrixThreeWheels);
-	model3Wheels = translate(model3Wheels, glm::vec3(0.023515, 8.0, 0.446066));
-	//model3Wheels = glm::scale(model3Wheels, glm::vec3(0.01f, 0.01f, 0.01f));
+	model3Wheels = translate(model3Wheels, glm::vec3(3.0, 2.0, -3.0));
+	model3Wheels = glm::rotate(model3Wheels, glm::radians(-90.0f), glm::vec3(0, 0, 1));
+	model3Wheels = glm::scale(model3Wheels, glm::vec3(0.06f, 0.06f, 0.06f));
 	modelThreeWheels.render(model3Wheels);
 	glEnable(GL_CULL_FACE);
 

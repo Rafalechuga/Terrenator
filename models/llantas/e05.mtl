@@ -1,0 +1,98 @@
+# 3ds Max Wavefront OBJ Exporter v0.97b - (c)2007 guruware
+# File Created: 23.06.2019 20:21:10
+
+newmtl 2
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3529 0.3529 0.3529
+	Kd 0.3529 0.3529 0.3529
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+	map_refl D:\Downloads\Modelling\Work_Equip_E05\textures\chrome_spici.dds
+
+newmtl 1
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.3529 0.3529 0.3529
+	Kd 0.3529 0.3529 0.3529
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+	map_refl D:\Downloads\Modelling\Work_Equip_E05\textures\chrome_obod.dds
+
+newmtl 09___Default
+	Ns 10.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.0000 0.0000 0.0000
+	Ks 0.0353 0.0353 0.0353
+	Ke 0.0000 0.0000 0.0000
+
+newmtl 3
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+	map_Ka D:\Downloads\Modelling\Work_Equip_E05\textures\small_bolts.png
+	map_Kd D:\Downloads\Modelling\Work_Equip_E05\textures\small_bolts.png
+	map_refl D:\Downloads\Modelling\Work_Equip_E05\textures\chrome_small_bolts.dds
+
+newmtl 5
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+	map_Ka D:\Downloads\Modelling\Work_Equip_E05\textures\cap.png
+	map_Kd D:\Downloads\Modelling\Work_Equip_E05\textures\cap.png
+	map_refl D:\Downloads\Modelling\Work_Equip_E05\textures\chrome_cap.dds
+
+newmtl 07___Default
+	Ns 25.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0196 0.0196 0.0196
+	Kd 0.0196 0.0196 0.0196
+	Ks 0.4950 0.4950 0.4950
+	Ke 0.0000 0.0000 0.0000
+	map_refl D:\Downloads\Modelling\Work_Equip_E05\textures\chrome_central_bolts.dds
+
+newmtl 7
+	Ns 20.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 0.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.5882 0.5882 0.5882
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.5400 0.5400 0.5400
+	Ke 0.0000 0.0000 0.0000
+	map_Ka D:\Downloads\Modelling\Work_Equip_E05\textures\logo.png
+	map_Kd D:\Downloads\Modelling\Work_Equip_E05\textures\logo.png
+	map_refl D:\Downloads\Modelling\Work_Equip_E05\textures\chrome_logo.dds
