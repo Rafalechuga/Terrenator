@@ -1810,13 +1810,12 @@ void applicationLoop() {
 		AbstractModel::OBB BarrelCollider;
 		// Set the orientation of collider before doing the scale
 		BarrelCollider.u = glm::quat_cast(modelMatrixBarrel);
-		modelmatrixColliderBarrel = glm::scale(modelmatrixColliderBarrel, glm::vec3(0.5, 0.5, 0.5));
-		modelmatrixColliderBarrel = glm::translate(modelmatrixColliderBarrel,
-			glm::vec3(modelBarrel.getObb().c.x,
-				modelBarrel.getObb().c.y,
-				modelBarrel.getObb().c.z));
+		modelmatrixColliderBarrel = glm::scale(modelmatrixColliderBarrel,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderBarrel = glm::translate(															//------------------------------------------------------------------------------------
+			modelmatrixColliderBarrel, modelBarrel.getObb().c);
 		BarrelCollider.c = glm::vec3(modelmatrixColliderBarrel[3]);
-		BarrelCollider.e = modelBarrel.getObb().e * glm::vec3(0.5, 0.5, 0.5);
+		BarrelCollider.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.0, 1.0);
 		addOrUpdateColliders(collidersOBB, "barrel", BarrelCollider, modelMatrixBarrel);
 
 		//Collider del la rock
