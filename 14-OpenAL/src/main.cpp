@@ -53,6 +53,9 @@
 //Shadownox inclide
 #include "Headers/ShadowBox.h"
 
+// Include text reandering
+#include "Headers/FontTypeRendering.h"
+
 #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
 
 int screenWidth;
@@ -157,6 +160,10 @@ Model victoryModelAnimate3;
 
 // Terrain model instance
 Terrain terrain(-1, -1, 200, 16, "../Textures/heightmap_2.png");
+
+
+//Text rendering
+FontTypeRendering::FontTypeRendering* textLifeRender;
 
 GLuint textureInicio0ID, textureInicio1ID, textureInicio2ID, textureControlID, textureCreditosID,textureCespedID, textureWallID, textureWindowID, textureHighwayID, textureLandingPadID;
 GLuint textureTerrainBackgroundID, textureTerrainRID, textureAsfaltoID, textureTerrainBID, textureTerrainBlendMapID;
@@ -869,6 +876,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	camera->setPosition(glm::vec3(0.0, 0.0, 10.0));
 	camera->setDistanceFromTarget(distanceFromTarget);
 	camera->setSensitivity(1.0);
+
+	//Text
+	textLifeRender = new FontTypeRendering::FontTypeRendering(screenWidth, screenHeight);
+	textLifeRender->Initialize();
 
 	// Definimos el tamanio de la imagen
 	int imageWidth, imageHeight;
@@ -2639,6 +2650,9 @@ void applicationLoop() {
 			break;
 		}
 
+		glEnable(GL_BLEND);
+		textLifeRender->render("                              Vidas: 3", 0.0 ,0.0, 30.0, 1.0, 0.0, 0.0);
+		glDisable(GL_BLEND);
 		glfwSwapBuffers(window);
 
 
@@ -2690,6 +2704,7 @@ void applicationLoop() {
 				alSourcePlay(source[i]);
 			}
 		}
+
 	}
 }
 

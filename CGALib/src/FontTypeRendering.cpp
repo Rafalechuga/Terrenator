@@ -175,7 +175,7 @@ void FontTypeRendering::render_text(const std::string &str, FT_Face face,
 			float x, y, s, t;
 		} data[6] = { { vx, vy, 0, 0 }, { vx, vy - h, 0, 1 },
 				{ vx + w, vy, 1, 0 }, { vx + w, vy, 1, 0 },
-				{ vx, vy - h, 0, 1 }, { vx + w, vy - h, 1, 1 } };
+				{ vx, vy - h, 0, 1 }, { vx + w, vy - h, 1, 1} };
 
 		// Se genera el buffer de los vertices.
 		glBufferData(GL_ARRAY_BUFFER, 24 * sizeof(float), data,
