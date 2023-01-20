@@ -441,8 +441,8 @@ GLuint depthMap, depthMapFBO;
  */
 
 // OpenAL Defines
-#define NUM_BUFFERS 6
-#define NUM_SOURCES 6
+#define NUM_BUFFERS 7
+#define NUM_SOURCES 7
 #define NUM_ENVIRONMENTS 1
 // Listener
 ALfloat listenerPos[] = { 0.0, 0.0, 4.0 };
@@ -470,6 +470,10 @@ ALfloat source4Vel[] = { 0.0, 0.0, 0.0 };
 ALfloat source5Pos[] = { 2.0, 0.0, 0.0 };
 ALfloat source5Vel[] = { 0.0, 0.0, 0.0 };
 
+// Source 6
+ALfloat source6Pos[] = { 2.0, 0.0, 0.0 };
+ALfloat source6Vel[] = { 0.0, 0.0, 0.0 };
+
 // Buffers
 ALuint buffer[NUM_BUFFERS];
 ALuint source[NUM_SOURCES];
@@ -480,7 +484,7 @@ ALenum format;
 ALvoid *data;
 int ch;
 ALboolean loop;
-std::vector<bool> sourcesPlay = {true, true, true, true, true, true};
+std::vector<bool> sourcesPlay = {true, true, true, true, true, true,true};
 
 // Se definen todos las funciones.
 void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes);
@@ -1319,6 +1323,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	buffer[3] = alutCreateBufferFromFile("../sounds/race_track.wav");
 	buffer[4] = alutCreateBufferFromFile("../sounds/racing_car.wav");
 	buffer[5] = alutCreateBufferFromFile("../sounds/car_idle.wav");
+	buffer[6] = alutCreateBufferFromFile("../sounds/car_crash.wav");
 	int errorAlut = alutGetError();
 	if (errorAlut != ALUT_ERROR_NO_ERROR){
 		printf("- Error open files with alut %d !!\n", errorAlut);
@@ -1386,6 +1391,15 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	alSourcei(source[5], AL_BUFFER, buffer[5]);
 	alSourcei(source[5], AL_LOOPING, AL_TRUE);
 	alSourcef(source[5], AL_MAX_DISTANCE, 500);
+
+	//Choque
+	alSourcef(source[6], AL_PITCH, 1.0f);
+	alSourcef(source[6], AL_GAIN, 0.3f);
+	alSourcefv(source[6], AL_POSITION, source6Pos);
+	alSourcefv(source[6], AL_VELOCITY, source6Vel);
+	alSourcei(source[6], AL_BUFFER, buffer[6]);
+	alSourcei(source[6], AL_LOOPING, AL_FALSE);
+	alSourcef(source[6], AL_MAX_DISTANCE, 500);
 }
 
 void destroy() {
@@ -2336,6 +2350,9 @@ void applicationLoop() {
 					isCollision = true;
 				}
 			}
+			if (it->first.compare("Terrenator") == 0 && isCollision == false) {
+				sourcesPlay[6] = true;
+			}
 			addOrUpdateCollisionDetection(collisionDetection, it->first, isCollision);
 		}
 
@@ -2354,6 +2371,7 @@ void applicationLoop() {
 					isCollision = true;
 				}
 			}
+			
 			addOrUpdateCollisionDetection(collisionDetection, it->first, isCollision);
 		}
 
@@ -2373,9 +2391,10 @@ void applicationLoop() {
 					addOrUpdateCollisionDetection(collisionDetection, jt->first, isCollision);
 				}
 			}
+			
 			addOrUpdateCollisionDetection(collisionDetection, it->first, isCollision);
 		}
-
+		
 		std::map<std::string, bool>::iterator colIt;
 		for (colIt = collisionDetection.begin(); colIt != collisionDetection.end();
 				colIt++) {
@@ -2390,15 +2409,22 @@ void applicationLoop() {
 					addOrUpdateColliders(collidersSBB, it->first);
 			}
 			if (jt != collidersOBB.end()) {
-				if (!colIt->second)
+				if (!colIt->second) {
 					addOrUpdateColliders(collidersOBB, jt->first);
+				}
 				else {
 					if (jt->first.compare("mayow") == 0)
 						modelMatrixMayow = std::get<1>(jt->second);
 					if (jt->first.compare("dart") == 0)
 						modelMatrixDart = std::get<1>(jt->second);
-					if (jt->first.compare("Terrenator") == 0)
+					if (jt->first.compare("Terrenator") == 0) {
+						if (sourcesPlay[6]) {
+							sourcesPlay[6] = false;
+							alSourcePlay(source[6]);
+						}
 						modelMatrixTerrenator = std::get<1>(jt->second);
+						
+					}
 				}
 			}
 		}
@@ -2518,6 +2544,11 @@ void applicationLoop() {
 		source5Pos[1] = modelMatrixTerrenator[3].y;
 		source5Pos[2] = modelMatrixTerrenator[3].z;
 		alSourcefv(source[5], AL_POSITION, source5Pos);
+
+		source6Pos[0] = modelMatrixTerrenator[3].x;
+		source6Pos[1] = modelMatrixTerrenator[3].y;
+		source6Pos[2] = modelMatrixTerrenator[3].z;
+		alSourcefv(source[5], AL_POSITION, source6Pos);
 
 		// Listener for the Thris person camera
 		/*listenerPos[0] = modelMatrixMayow[3].x;
