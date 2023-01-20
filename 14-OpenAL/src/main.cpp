@@ -1,3 +1,4 @@
+
 #define _USE_MATH_DEFINES
 #include <cmath>
 //glew include
@@ -72,6 +73,8 @@ Shader shaderTerrain;
 Shader shaderParticlesFountain;
 //Shader para las particulas de fuego
 Shader shaderParticlesFire;
+//Shader para las particulas de lluvia
+Shader shaderParticlesLluvia;
 //Shader para visualizar el buffer de profundidad
 Shader shaderViewDepth;
 //Shader para dibujar el buffer de profunidad
@@ -138,6 +141,20 @@ Model modelFountain;
 // Model animate instance
 // Mayow
 Model mayowModelAnimate;
+//Model barrel
+Model modelBarrel;
+//Model wheels
+Model modelThreeWheels;
+//Model rock2
+Model modelRock2;
+
+//Celebrate
+Model victoryModelAnimate;
+Model victoryModelAnimate2;
+Model victoryModelAnimate3;
+
+
+
 // Terrain model instance
 Terrain terrain(-1, -1, 200, 16, "../Textures/heightmap_2.png");
 
@@ -177,7 +194,15 @@ glm::mat4 modelMatrixAircraft = glm::mat4(1.0);
 glm::mat4 modelMatrixDart = glm::mat4(1.0f);
 glm::mat4 modelMatrixMayow = glm::mat4(1.0f);
 glm::mat4 modelMatrixFountain = glm::mat4(1.0f);
+
 glm::mat4 modelMatrixTerrenator = glm::mat4(1.0f);
+glm::mat4 modelMatrixBarrel = glm::mat4(1.0f);
+glm::mat4 modelMatrixThreeWheels = glm::mat4(1.0f);
+glm::mat4 modelMatrixRock2 = glm::mat4(1.0f);
+glm::mat4 modelMatrixVictory = glm::mat4(1.0f);
+glm::mat4 modelMatrixVictory2 = glm::mat4(1.0f);
+glm::mat4 modelMatrixVictory3 = glm::mat4(1.0f);
+
 
 int animationIndex = 1;
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
@@ -401,7 +426,8 @@ std::map<std::string, glm::vec3> blendingUnsorted = {
 		{"lambo", glm::vec3(23.0, 0.0, 0.0)},
 		{"heli", glm::vec3(5.0, 10.0, -5.0)},
 		{"fountain", glm::vec3(5.0, 0.0, -40.0)},
-		{"fire", glm::vec3(0.0, 0.0, 7.0)}
+		{"fire", glm::vec3(0.0, 0.0, 7.0)},
+		{"lluvia", glm::vec3(0.0, 0.0, 0.0)}
 };
 
 double deltaTime;
@@ -422,12 +448,12 @@ double currTimeParticlesAnimation, lastTimeParticlesAnimation;
 // Definition for the particle system fire
 GLuint initVelFire, startTimeFire;
 GLuint VAOParticlesFire;
-GLuint nParticlesFire = 2000;
+GLuint nParticlesFire = 8000;
 GLuint posBuf[2], velBuf[2], age[2];
 GLuint particleArray[2];
 GLuint feedback[2];
 GLuint drawBuf = 1;
-float particleSize = 0.5, particleLifetime = 3.0;
+float particleSize = 0.035, particleLifetime = 3.0;
 double currTimeParticlesAnimationFire, lastTimeParticlesAnimationFire;
 
 // Colliders
@@ -698,6 +724,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	shaderTerrain.initialize("../Shaders/terrain_shadow.vs", "../Shaders/terrain_shadow.fs");
 	shaderParticlesFountain.initialize("../Shaders/particlesFountain.vs", "../Shaders/particlesFountain.fs");
 	shaderParticlesFire.initialize("../Shaders/particlesFire.vs", "../Shaders/particlesFire.fs", {"Position", "Velocity", "Age"});
+	shaderParticlesLluvia.initialize("../Shaders/particlesLluvia.vs", "../Shaders/particlesLluvia.fs", { "Position", "Velocity", "Age" });
 	shaderViewDepth.initialize("../Shaders/texturizado.vs", "../Shaders/texturizado_depth_view.fs");
 	shaderDepth.initialize("../Shaders/shadow_mapping_depth.vs", "../Shaders/shadow_mapping_depth.fs");
 	shaderTextura.initialize( "../Shaders/texturizado.vs", "../Shaders/texturizado.fs");
@@ -818,6 +845,26 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//Mayow
 	mayowModelAnimate.loadModel("../models/mayow/personaje2.fbx");
 	mayowModelAnimate.setShader(&shaderMulLighting);
+
+	//Barrel
+	modelBarrel.loadModel("../models/Barrel/barrel.fbx");
+	modelBarrel.setShader(&shaderMulLighting);
+
+	//ThreeWheels
+	modelThreeWheels.loadModel("../models/llantas/Car tire 2.obj");
+	modelThreeWheels.setShader(&shaderMulLighting);
+
+	//Rock2
+	modelRock2.loadModel("../models/rock/rock2/CavePlatform1_Fbx.fbx");
+	modelRock2.setShader(&shaderMulLighting);
+
+	//Victory
+	victoryModelAnimate.loadModel("../models/victory/Victory Idle.dae");
+	victoryModelAnimate.setShader(&shaderMulLighting);
+	victoryModelAnimate2.loadModel("../models/victory/Victory.dae");
+	victoryModelAnimate2.setShader(&shaderMulLighting);
+	victoryModelAnimate3.loadModel("../models/victory/Victory Idle2.dae");
+	victoryModelAnimate3.setShader(&shaderMulLighting);
 
 	camera->setPosition(glm::vec3(0.0, 0.0, 10.0));
 	camera->setDistanceFromTarget(distanceFromTarget);
@@ -1394,13 +1441,21 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_1D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-	shaderParticlesFire.setInt("Pass", 1);
+	/*shaderParticlesFire.setInt("Pass", 1);
 	shaderParticlesFire.setInt("ParticleTex", 0);
 	shaderParticlesFire.setInt("RandomTex", 1);
 	shaderParticlesFire.setFloat("ParticleLifetime", particleLifetime);
 	shaderParticlesFire.setFloat("ParticleSize", particleSize);
 	shaderParticlesFire.setVectorFloat3("Accel", glm::value_ptr(glm::vec3(0.0f,0.1f,0.0f)));
-	shaderParticlesFire.setVectorFloat3("Emitter", glm::value_ptr(glm::vec3(0.0f)));
+	shaderParticlesFire.setVectorFloat3("Emitter", glm::value_ptr(glm::vec3(0.0f)));*/
+
+	shaderParticlesLluvia.setInt("Pass", 1);
+	shaderParticlesLluvia.setInt("ParticleTex", 0);
+	shaderParticlesLluvia.setInt("RandomTex", 1);
+	shaderParticlesLluvia.setFloat("ParticleLifetime", particleLifetime);
+	shaderParticlesLluvia.setFloat("ParticleSize", particleSize);
+	shaderParticlesLluvia.setVectorFloat3("Accel", glm::value_ptr(glm::vec3(0.0f, -10.3f, 0.0f)));
+	shaderParticlesLluvia.setVectorFloat3("Emitter", glm::value_ptr(glm::vec3(0.0f, 10.0, 0.0f)));
 
 	glm::mat3 basis;
 	glm::vec3 u, v, n;
@@ -1414,6 +1469,8 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	basis[1] = glm::normalize(v);
 	basis[2] = glm::normalize(n);
 	shaderParticlesFire.setMatrix3("EmitterBasis", 1, false, glm::value_ptr(basis));
+
+	shaderParticlesLluvia.setMatrix3("EmitterBasis", 1, false, glm::value_ptr(basis));
 
 	/*******************************************
 	 * Inicializacion de los buffers de la fuente
@@ -1524,6 +1581,7 @@ void destroy() {
 	shaderTerrain.destroy();
 	shaderParticlesFountain.destroy();
 	shaderParticlesFire.destroy();
+	shaderParticlesLluvia.destroy();
 
 	// Basic objects Delete
 	skyboxSphere.destroy();
@@ -1565,12 +1623,20 @@ void destroy() {
 
 	modelGrass.destroy();
 	modelFountain.destroy();
+
 	modelTerrenator.destroy();
 	modelTerrenatorFrontLeftWheel.destroy();
 	modelTerrenatorFrontRightWheel.destroy();
 	modelTerrenatorRearLeftWheel.destroy();
 	modelTerrenatorRearRightWheel.destroy();
 	
+	modelBarrel.destroy();
+	modelThreeWheels.destroy();
+	modelRock2.destroy();
+	victoryModelAnimate.destroy();
+	victoryModelAnimate2.destroy();
+	victoryModelAnimate3.destroy();
+
 
 	// Custom objects animate
 	mayowModelAnimate.destroy();
@@ -2025,6 +2091,11 @@ void applicationLoop() {
 		shaderParticlesFire.setMatrix4("projection", 1, false, glm::value_ptr(projection));
 		shaderParticlesFire.setMatrix4("view", 1, false, glm::value_ptr(view));
 
+		// Settea la matriz de vista y projection al shader para la lluvia
+		shaderParticlesLluvia.setInt("Pass", 2);
+		shaderParticlesLluvia.setMatrix4("projection", 1, false, glm::value_ptr(projection));
+		shaderParticlesLluvia.setMatrix4("view", 1, false, glm::value_ptr(view));
+
 		/*******************************************
 		 * Propiedades de neblina
 		 *******************************************/
@@ -2224,8 +2295,8 @@ void applicationLoop() {
 		modelmatrixColliderDart = glm::scale(modelmatrixColliderDart, glm::vec3(0.5, 0.5, 0.5));
 		modelmatrixColliderDart = glm::translate(modelmatrixColliderDart,
 				glm::vec3(modelDartLegoBody.getObb().c.x,
-						modelDartLegoBody.getObb().c.y,
-						modelDartLegoBody.getObb().c.z));
+					modelDartLegoBody.getObb().c.y,
+					modelDartLegoBody.getObb().c.z));
 		dartLegoBodyCollider.c = glm::vec3(modelmatrixColliderDart[3]);
 		dartLegoBodyCollider.e = modelDartLegoBody.getObb().e * glm::vec3(0.5, 0.5, 0.5);
 		addOrUpdateColliders(collidersOBB, "dart", dartLegoBodyCollider, modelMatrixDart);
@@ -2237,11 +2308,50 @@ void applicationLoop() {
 		aircraftCollider.u = glm::quat_cast(modelMatrixAircraft);
 		modelMatrixColliderAircraft = glm::scale(modelMatrixColliderAircraft,
 				glm::vec3(1.0, 1.0, 1.0));
-		modelMatrixColliderAircraft = glm::translate(
+		modelMatrixColliderAircraft = glm::translate(			
 				modelMatrixColliderAircraft, modelAircraft.getObb().c);
 		aircraftCollider.c = glm::vec3(modelMatrixColliderAircraft[3]);
 		aircraftCollider.e = modelAircraft.getObb().e * glm::vec3(1.0, 1.0, 1.0);
 		addOrUpdateColliders(collidersOBB, "aircraft", aircraftCollider, modelMatrixAircraft);
+
+		//Collider de barril
+		glm::mat4 modelmatrixColliderBarrel = glm::mat4(modelMatrixBarrel);
+		AbstractModel::OBB BarrelCollider;
+		// Set the orientation of collider before doing the scale
+		BarrelCollider.u = glm::quat_cast(modelMatrixBarrel);
+		modelmatrixColliderBarrel = glm::scale(modelmatrixColliderBarrel,
+			glm::vec3(2.0, 2.0, 5.0));
+		modelmatrixColliderBarrel = glm::translate(							
+			modelmatrixColliderBarrel, glm::vec3(0.0, 1.0, 0.08));
+		BarrelCollider.c = glm::vec3(modelmatrixColliderBarrel[3]);
+		BarrelCollider.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
+		addOrUpdateColliders(collidersOBB, "barrel", BarrelCollider, modelMatrixBarrel);
+
+		//Collider de llanta
+		glm::mat4 modelmatrixColliderWheels = glm::mat4(modelMatrixThreeWheels);
+		AbstractModel::OBB WheelsCollider;
+		// Set the orientation of collider before doing the scale
+		WheelsCollider.u = glm::quat_cast(modelMatrixThreeWheels);
+		modelmatrixColliderWheels = glm::scale(modelmatrixColliderWheels,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderWheels = glm::translate(
+			modelmatrixColliderWheels, glm::vec3(4.5, 2.0, -3.0));
+		WheelsCollider.c = glm::vec3(modelmatrixColliderWheels[3]);
+		WheelsCollider.e = modelThreeWheels.getObb().e * glm::vec3(0.09, 0.03, 0.07);
+		addOrUpdateColliders(collidersOBB, "wheels", WheelsCollider, modelMatrixThreeWheels);
+
+		//Collider de rock2
+		glm::mat4 modelmatrixColliderRock2 = glm::mat4(modelMatrixRock2);
+		AbstractModel::OBB Rock2Collider;
+		// Set the orientation of collider before doing the scale
+		Rock2Collider.u = glm::quat_cast(modelMatrixRock2);
+		modelmatrixColliderRock2 = glm::scale(modelmatrixColliderRock2,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderRock2 = glm::translate(
+			modelmatrixColliderRock2, glm::vec3(1.023515, 1.0, 9.446066));
+		Rock2Collider.c = glm::vec3(modelmatrixColliderRock2[3]);
+		Rock2Collider.e = modelRock2.getObb().e * glm::vec3(0.07, 0.08, 0.06);
+		addOrUpdateColliders(collidersOBB, "rock2", Rock2Collider, modelMatrixRock2);
 
 		//Collider del la rock
 		AbstractModel::SBB rockCollider;
@@ -2637,6 +2747,9 @@ void prepareScene(){
 
 	//Mayow
 	mayowModelAnimate.setShader(&shaderMulLighting);
+
+	//Barrel
+	modelBarrel.setShader(&shaderMulLighting);
 }
 
 void prepareDepthScene(){
@@ -2788,6 +2901,7 @@ void renderScene(bool renderParticles){
 	modelFountain.render(modelMatrixFountain);
 	glEnable(GL_CULL_FACE);
 
+
 	// Terrenator
 	glDisable(GL_CULL_FACE);
 	glm::vec3 ejeyTerrenator = glm::normalize(terrain.getNormalTerrain(modelMatrixTerrenator[3][0],
@@ -2830,6 +2944,54 @@ void renderScene(bool renderParticles){
 
 	modelTerrenatorRearLeftWheel.render(modelMatrixTerrenatorChasis);
 	modelTerrenatorRearRightWheel.render(modelMatrixTerrenatorChasis);
+
+	//Barrel
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelBarril = glm::mat4(modelMatrixBarrel);
+	modelBarril = translate(modelBarril, glm::vec3(-0.023515, 1.0, 0.446066));
+	modelBarril = glm::rotate(modelBarril, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	modelBarril = glm::scale(modelBarril, glm::vec3(1.0f, 1.0f, 1.0f));
+	modelBarrel.render(modelBarril);
+	glEnable(GL_CULL_FACE);
+
+	//ThreeWheels
+	glDisable(GL_CULL_FACE);
+	glm::mat4 model3Wheels = glm::mat4(modelMatrixThreeWheels);
+	model3Wheels = translate(model3Wheels, glm::vec3(3.0, 2.0, -3.0));
+	model3Wheels = glm::rotate(model3Wheels, glm::radians(-90.0f), glm::vec3(0, 0, 1));
+	model3Wheels = glm::scale(model3Wheels, glm::vec3(0.06f, 0.06f, 0.06f));
+	modelThreeWheels.render(model3Wheels);
+	glEnable(GL_CULL_FACE);
+
+	//Victory
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelVictory = glm::mat4(modelMatrixVictory);
+	modelVictory = translate(modelVictory, glm::vec3(-0.023515, 1.0, 12.446066));
+	modelVictory = glm::scale(modelVictory, glm::vec3(0.02f, 0.02f, 0.02f));
+	victoryModelAnimate.render(modelVictory);
+	glEnable(GL_CULL_FACE);
+	
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelVictory2 = glm::mat4(modelMatrixVictory2);
+	modelVictory2 = translate(modelVictory2, glm::vec3(-0.023515, 1.0, 4.446066));
+	modelVictory2 = glm::scale(modelVictory2, glm::vec3(0.02f, 0.02f, 0.02f));
+	victoryModelAnimate2.render(modelVictory2);
+	glEnable(GL_CULL_FACE);
+
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelVictory3 = glm::mat4(modelMatrixVictory3);
+	modelVictory3 = translate(modelVictory3, glm::vec3(-0.023515, 1.0, 8.446066));
+	modelVictory3 = glm::scale(modelVictory3, glm::vec3(0.02f, 0.02f, 0.02f));
+	victoryModelAnimate3.render(modelVictory3);
+	glEnable(GL_CULL_FACE);
+
+	//Rock2
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelRocktwo = glm::mat4(modelMatrixRock2);
+	modelRocktwo = translate(modelRocktwo, glm::vec3(1.023515, 1.0, 10.446066));
+	modelRocktwo = glm::scale(modelRocktwo, glm::vec3(0.08f, 0.08f, 0.08f));
+	modelRock2.render(modelRocktwo);
+
 	glEnable(GL_CULL_FACE);
 
 	// Dart lego
@@ -2998,61 +3160,122 @@ void renderScene(bool renderParticles){
 			 * End Render particles systems
 			 */
 		}
-		else if(renderParticles && it->second.first.compare("fire") == 0){
+		//else if(renderParticles && it->second.first.compare("fire") == 0){
+		//	/**********
+		//	 * Init Render particles systems
+		//	 */
+		//	lastTimeParticlesAnimationFire = currTimeParticlesAnimationFire;
+		//	currTimeParticlesAnimationFire = TimeManager::Instance().GetTime();
+
+		//	shaderParticlesFire.setInt("Pass", 1);
+		//	shaderParticlesFire.setFloat("Time", currTimeParticlesAnimationFire);
+		//	shaderParticlesFire.setFloat("DeltaT", currTimeParticlesAnimationFire - lastTimeParticlesAnimationFire);
+
+		//	glActiveTexture(GL_TEXTURE1);
+		//	glBindTexture(GL_TEXTURE_1D, texId);
+		//	glEnable(GL_RASTERIZER_DISCARD);
+		//	glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, feedback[drawBuf]);
+		//	glBeginTransformFeedback(GL_POINTS);
+		//	glBindVertexArray(particleArray[1-drawBuf]);
+		//	glVertexAttribDivisor(0,0);
+		//	glVertexAttribDivisor(1,0);
+		//	glVertexAttribDivisor(2,0);
+		//	glDrawArrays(GL_POINTS, 0, nParticlesFire);
+		//	glEndTransformFeedback();
+		//	glDisable(GL_RASTERIZER_DISCARD);
+
+		//	shaderParticlesFire.setInt("Pass", 2);
+		//	glm::mat4 modelFireParticles = glm::mat4(1.0);
+		//	modelFireParticles = glm::translate(modelFireParticles, it->second.second);
+		//	modelFireParticles[3][1] = terrain.getHeightTerrain(modelFireParticles[3][0], modelFireParticles[3][2]);
+		//	shaderParticlesFire.setMatrix4("model", 1, false, glm::value_ptr(modelFireParticles));
+
+		//	shaderParticlesFire.turnOn();
+		//	glActiveTexture(GL_TEXTURE0);
+		//	glBindTexture(GL_TEXTURE_2D, textureParticleFireID);
+		//	glDepthMask(GL_FALSE);
+		//	glBindVertexArray(particleArray[drawBuf]);
+		//	glVertexAttribDivisor(0,1);
+		//	glVertexAttribDivisor(1,1);
+		//	glVertexAttribDivisor(2,1);
+		//	glDrawArraysInstanced(GL_TRIANGLES, 0, 6, nParticlesFire);
+		//	glBindVertexArray(0);
+		//	glDepthMask(GL_TRUE);
+		//	drawBuf = 1 - drawBuf;
+		//	shaderParticlesFire.turnOff();
+
+		//	/****************************+
+		//	 * Open AL sound data
+		//	 */
+		//	source1Pos[0] = modelFireParticles[3].x;
+		//	source1Pos[1] = modelFireParticles[3].y;
+		//	source1Pos[2] = modelFireParticles[3].z;
+		//	alSourcefv(source[1], AL_POSITION, source1Pos);
+
+		//	/**********
+		//	 * End Render particles systems
+		//	 */
+		//}
+		else if (renderParticles && it->second.first.compare("lluvia") == 0) {
 			/**********
 			 * Init Render particles systems
 			 */
-			lastTimeParticlesAnimationFire = currTimeParticlesAnimationFire;
-			currTimeParticlesAnimationFire = TimeManager::Instance().GetTime();
+			 lastTimeParticlesAnimationFire = currTimeParticlesAnimationFire;
+			 currTimeParticlesAnimationFire = TimeManager::Instance().GetTime();
 
-			shaderParticlesFire.setInt("Pass", 1);
-			shaderParticlesFire.setFloat("Time", currTimeParticlesAnimationFire);
-			shaderParticlesFire.setFloat("DeltaT", currTimeParticlesAnimationFire - lastTimeParticlesAnimationFire);
+			 shaderParticlesLluvia.setInt("Pass", 1);
+			 shaderParticlesLluvia.setFloat("Time", currTimeParticlesAnimationFire);
+			 shaderParticlesLluvia.setFloat("DeltaT", currTimeParticlesAnimationFire - lastTimeParticlesAnimationFire);
 
-			glActiveTexture(GL_TEXTURE1);
-			glBindTexture(GL_TEXTURE_1D, texId);
-			glEnable(GL_RASTERIZER_DISCARD);
-			glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, feedback[drawBuf]);
-			glBeginTransformFeedback(GL_POINTS);
-			glBindVertexArray(particleArray[1-drawBuf]);
-			glVertexAttribDivisor(0,0);
-			glVertexAttribDivisor(1,0);
-			glVertexAttribDivisor(2,0);
-			glDrawArrays(GL_POINTS, 0, nParticlesFire);
-			glEndTransformFeedback();
-			glDisable(GL_RASTERIZER_DISCARD);
+			 glActiveTexture(GL_TEXTURE1);
+			 glBindTexture(GL_TEXTURE_1D, texId);
+			 glEnable(GL_RASTERIZER_DISCARD);
+			 glBindTransformFeedback(GL_TRANSFORM_FEEDBACK, feedback[drawBuf]);
+			 glBeginTransformFeedback(GL_POINTS);
+			 glBindVertexArray(particleArray[1 - drawBuf]);
+			 glVertexAttribDivisor(0, 0);
+			 glVertexAttribDivisor(1, 0);
+			 glVertexAttribDivisor(2, 0);
+			 glDrawArrays(GL_POINTS, 0, nParticlesFire);
+			 glEndTransformFeedback();
+			 glDisable(GL_RASTERIZER_DISCARD);
 
-			shaderParticlesFire.setInt("Pass", 2);
-			glm::mat4 modelFireParticles = glm::mat4(1.0);
-			modelFireParticles = glm::translate(modelFireParticles, it->second.second);
-			modelFireParticles[3][1] = terrain.getHeightTerrain(modelFireParticles[3][0], modelFireParticles[3][2]);
-			shaderParticlesFire.setMatrix4("model", 1, false, glm::value_ptr(modelFireParticles));
+			 shaderParticlesLluvia.setInt("Pass", 2);
+			 glm::mat4 modelFireParticles = glm::mat4(1.0);
+			 modelFireParticles = glm::translate(modelFireParticles, it->second.second);
+			 modelFireParticles[3][1] = terrain.getHeightTerrain(modelFireParticles[3][0], modelFireParticles[3][2]);
+			 //--------La lluvia sigue al modelo---------//
+			 glm::vec3 positionEmitter = glm::vec3(modelMatrixMayow[3]);
+			 positionEmitter.y = 10.0;
+			 shaderParticlesLluvia.setVectorFloat3("Emitter", glm::value_ptr(glm::vec3(positionEmitter)));
+			 //-------------//
+			 shaderParticlesLluvia.setMatrix4("model", 1, false, glm::value_ptr(modelFireParticles));
 
-			shaderParticlesFire.turnOn();
-			glActiveTexture(GL_TEXTURE0);
-			glBindTexture(GL_TEXTURE_2D, textureParticleFireID);
-			glDepthMask(GL_FALSE);
-			glBindVertexArray(particleArray[drawBuf]);
-			glVertexAttribDivisor(0,1);
-			glVertexAttribDivisor(1,1);
-			glVertexAttribDivisor(2,1);
-			glDrawArraysInstanced(GL_TRIANGLES, 0, 6, nParticlesFire);
-			glBindVertexArray(0);
-			glDepthMask(GL_TRUE);
-			drawBuf = 1 - drawBuf;
-			shaderParticlesFire.turnOff();
+			 shaderParticlesLluvia.turnOn();
+			 glActiveTexture(GL_TEXTURE0);
+			 glBindTexture(GL_TEXTURE_2D, textureParticleFountainID);
+			 glDepthMask(GL_FALSE);
+			 glBindVertexArray(particleArray[drawBuf]);
+			 glVertexAttribDivisor(0, 1);
+			 glVertexAttribDivisor(1, 1);
+			 glVertexAttribDivisor(2, 1);
+			 glDrawArraysInstanced(GL_TRIANGLES, 0, 6, nParticlesFire);
+			 glBindVertexArray(0);
+			 glDepthMask(GL_TRUE);
+			 drawBuf = 1 - drawBuf;
+			 shaderParticlesLluvia.turnOff();
 
-			/****************************+
-			 * Open AL sound data
-			 */
-			source1Pos[0] = modelFireParticles[3].x;
-			source1Pos[1] = modelFireParticles[3].y;
-			source1Pos[2] = modelFireParticles[3].z;
-			alSourcefv(source[1], AL_POSITION, source1Pos);
+			 /****************************+
+			  * Open AL sound data
+			  */
+			 source1Pos[0] = modelFireParticles[3].x;
+			 source1Pos[1] = modelFireParticles[3].y;
+			 source1Pos[2] = modelFireParticles[3].z;
+			 alSourcefv(source[1], AL_POSITION, source1Pos);
 
-			/**********
-			 * End Render particles systems
-			 */
+			 /**********
+			  * End Render particles systems
+			  */
 		}
 
 	}
