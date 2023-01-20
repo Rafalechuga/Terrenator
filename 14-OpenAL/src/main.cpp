@@ -138,6 +138,8 @@ Model modelRock2;
 
 //Celebrate
 Model victoryModelAnimate;
+Model victoryModelAnimate2;
+Model victoryModelAnimate3;
 
 
 
@@ -183,6 +185,8 @@ glm::mat4 modelMatrixBarrel = glm::mat4(1.0f);
 glm::mat4 modelMatrixThreeWheels = glm::mat4(1.0f);
 glm::mat4 modelMatrixRock2 = glm::mat4(1.0f);
 glm::mat4 modelMatrixVictory = glm::mat4(1.0f);
+glm::mat4 modelMatrixVictory2 = glm::mat4(1.0f);
+glm::mat4 modelMatrixVictory3 = glm::mat4(1.0f);
 
 int animationIndex = 1;
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
@@ -642,9 +646,13 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelRock2.loadModel("../models/rock/rock2/CavePlatform1_Fbx.fbx");
 	modelRock2.setShader(&shaderMulLighting);
 
-	////Victory
-	//victoryModelAnimate.loadModel("../models/victory/victory.fbx");
-	//victoryModelAnimate.setShader(&shaderMulLighting);
+	//Victory
+	victoryModelAnimate.loadModel("../models/victory/Victory Idle.dae");
+	victoryModelAnimate.setShader(&shaderMulLighting);
+	victoryModelAnimate2.loadModel("../models/victory/Victory.dae");
+	victoryModelAnimate2.setShader(&shaderMulLighting);
+	victoryModelAnimate3.loadModel("../models/victory/Victory Idle2.dae");
+	victoryModelAnimate3.setShader(&shaderMulLighting);
 
 	camera->setPosition(glm::vec3(0.0, 0.0, 10.0));
 	camera->setDistanceFromTarget(distanceFromTarget);
@@ -1238,6 +1246,8 @@ void destroy() {
 	modelThreeWheels.destroy();
 	modelRock2.destroy();
 	victoryModelAnimate.destroy();
+	victoryModelAnimate2.destroy();
+	victoryModelAnimate3.destroy();
 
 	// Custom objects animate
 	mayowModelAnimate.destroy();
@@ -2382,17 +2392,26 @@ void renderScene(bool renderParticles){
 	glEnable(GL_CULL_FACE);
 
 	//Victory
-	/*glDisable(GL_CULL_FACE);
-	glm::mat4 modelVictory = glm::mat4(modelMatrixVictory);*/
-	/*modelVictory = translate(modelVictory, glm::vec3(-0.023515, 1.0, 0.446066));
-	modelVictory = glm::rotate(modelVictory, glm::radians(-90.0f), glm::vec3(1, 0, 0));
-	modelVictory = glm::scale(modelVictory, glm::vec3(1.0f, 1.0f, 1.0f));*/
-	//victoryModelAnimate.render(modelVictory);
-	//glEnable(GL_CULL_FACE);
-	//glm::mat4 modelMatrixVictoryBody = glm::mat4(modelMatrixVictory);
-	////modelMatrixVictoryBody = glm::scale(modelMatrixVictoryBody, glm::vec3(0.021, 0.021, 0.021));
-	//victoryModelAnimate.setAnimationIndex(animationIndex);
-	//victoryModelAnimate.render(modelMatrixVictoryBody);
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelVictory = glm::mat4(modelMatrixVictory);
+	modelVictory = translate(modelVictory, glm::vec3(-0.023515, 1.0, 12.446066));
+	modelVictory = glm::scale(modelVictory, glm::vec3(0.02f, 0.02f, 0.02f));
+	victoryModelAnimate.render(modelVictory);
+	glEnable(GL_CULL_FACE);
+	
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelVictory2 = glm::mat4(modelMatrixVictory2);
+	modelVictory2 = translate(modelVictory2, glm::vec3(-0.023515, 1.0, 4.446066));
+	modelVictory2 = glm::scale(modelVictory2, glm::vec3(0.02f, 0.02f, 0.02f));
+	victoryModelAnimate2.render(modelVictory2);
+	glEnable(GL_CULL_FACE);
+
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelVictory3 = glm::mat4(modelMatrixVictory3);
+	modelVictory3 = translate(modelVictory3, glm::vec3(-0.023515, 1.0, 8.446066));
+	modelVictory3 = glm::scale(modelVictory3, glm::vec3(0.02f, 0.02f, 0.02f));
+	victoryModelAnimate3.render(modelVictory3);
+	glEnable(GL_CULL_FACE);
 
 	//Rock2
 	glDisable(GL_CULL_FACE);
