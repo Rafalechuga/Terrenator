@@ -441,8 +441,8 @@ GLuint depthMap, depthMapFBO;
  */
 
 // OpenAL Defines
-#define NUM_BUFFERS 3
-#define NUM_SOURCES 3
+#define NUM_BUFFERS 6
+#define NUM_SOURCES 6
 #define NUM_ENVIRONMENTS 1
 // Listener
 ALfloat listenerPos[] = { 0.0, 0.0, 4.0 };
@@ -457,6 +457,19 @@ ALfloat source1Vel[] = { 0.0, 0.0, 0.0 };
 // Source 2
 ALfloat source2Pos[] = { 2.0, 0.0, 0.0 };
 ALfloat source2Vel[] = { 0.0, 0.0, 0.0 };
+
+// Source 3
+ALfloat source3Pos[] = { 2.0, 0.0, 0.0 };
+ALfloat source3Vel[] = { 0.0, 0.0, 0.0 };
+
+// Source 4
+ALfloat source4Pos[] = { 2.0, 0.0, 0.0 };
+ALfloat source4Vel[] = { 0.0, 0.0, 0.0 };
+
+// Source 5
+ALfloat source5Pos[] = { 2.0, 0.0, 0.0 };
+ALfloat source5Vel[] = { 0.0, 0.0, 0.0 };
+
 // Buffers
 ALuint buffer[NUM_BUFFERS];
 ALuint source[NUM_SOURCES];
@@ -467,7 +480,7 @@ ALenum format;
 ALvoid *data;
 int ch;
 ALboolean loop;
-std::vector<bool> sourcesPlay = {true, true, true};
+std::vector<bool> sourcesPlay = {true, true, true, true, true, true};
 
 // Se definen todos las funciones.
 void reshapeCallback(GLFWwindow *Window, int widthRes, int heightRes);
@@ -1303,6 +1316,9 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	buffer[0] = alutCreateBufferFromFile("../sounds/fountain.wav");
 	buffer[1] = alutCreateBufferFromFile("../sounds/fire.wav");
 	buffer[2] = alutCreateBufferFromFile("../sounds/darth_vader.wav");
+	buffer[3] = alutCreateBufferFromFile("../sounds/race_track.wav");
+	buffer[4] = alutCreateBufferFromFile("../sounds/racing_car.wav");
+	buffer[5] = alutCreateBufferFromFile("../sounds/car_idle.wav");
 	int errorAlut = alutGetError();
 	if (errorAlut != ALUT_ERROR_NO_ERROR){
 		printf("- Error open files with alut %d !!\n", errorAlut);
@@ -1343,6 +1359,33 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	alSourcei(source[2], AL_BUFFER, buffer[2]);
 	alSourcei(source[2], AL_LOOPING, AL_TRUE);
 	alSourcef(source[2], AL_MAX_DISTANCE, 500);
+
+	//tema musical
+	alSourcef(source[3], AL_PITCH, 1.0f);
+	alSourcef(source[3], AL_GAIN, 1.0f);
+	alSourcefv(source[3], AL_POSITION, source3Pos);
+	alSourcefv(source[3], AL_VELOCITY, source3Vel);
+	alSourcei(source[3], AL_BUFFER, buffer[3]);
+	alSourcei(source[3], AL_LOOPING, AL_TRUE);
+	alSourcef(source[3], AL_MAX_DISTANCE, 500);
+
+	//Terrenator en marcha
+	alSourcef(source[4], AL_PITCH, 1.0f);
+	alSourcef(source[4], AL_GAIN, 0.05f);
+	alSourcefv(source[4], AL_POSITION, source4Pos);
+	alSourcefv(source[4], AL_VELOCITY, source4Vel);
+	alSourcei(source[4], AL_BUFFER, buffer[4]);
+	alSourcei(source[4], AL_LOOPING, AL_TRUE);
+	alSourcef(source[4], AL_MAX_DISTANCE, 500);
+
+	//Terrenator en reposo
+	alSourcef(source[5], AL_PITCH, 1.0f);
+	alSourcef(source[5], AL_GAIN, 3.0f);
+	alSourcefv(source[5], AL_POSITION, source5Pos);
+	alSourcefv(source[5], AL_VELOCITY, source5Vel);
+	alSourcei(source[5], AL_BUFFER, buffer[5]);
+	alSourcei(source[5], AL_LOOPING, AL_TRUE);
+	alSourcef(source[5], AL_MAX_DISTANCE, 500);
 }
 
 void destroy() {
@@ -1598,8 +1641,26 @@ bool processInput(bool continueApplication) {
 				rotWheelsY -= 0.02;
 
 		}
+		//reproduce sonido
+		if (sourcesPlay[4] && iniciaPartida) {
+			sourcesPlay[4] = false;
+			sourcesPlay[5] = true;
+			alSourceStop(source[5]);
+			alSourcePlay(source[4]);
+		}
 	}
-	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+	else {
+		if (!sourcesPlay[4]) {
+			sourcesPlay[4] = true;
+			alSourceStop(source[4]);
+			
+		}
+		if(sourcesPlay[5] && iniciaPartida){
+			alSourcePlay(source[5]);
+			sourcesPlay[5] = false;
+		}
+	}
+	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, -0.11));
 		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 			&& abs(axes[0]) < 0.02f) {
@@ -2378,6 +2439,23 @@ void applicationLoop() {
 		source2Pos[2] = modelMatrixDart[3].z;
 		alSourcefv(source[2], AL_POSITION, source2Pos);
 
+		
+
+		source3Pos[0] = camera->getPosition().x;
+		source3Pos[1] = camera->getPosition().y;
+		source3Pos[2] = camera->getPosition().z;
+		alSourcefv(source[3], AL_POSITION, source3Pos);
+
+		source4Pos[0] = modelMatrixTerrenator[3].x;
+		source4Pos[1] = modelMatrixTerrenator[3].y;
+		source4Pos[2] = modelMatrixTerrenator[3].z;
+		alSourcefv(source[4], AL_POSITION, source4Pos);
+
+		source5Pos[0] = modelMatrixTerrenator[3].x;
+		source5Pos[1] = modelMatrixTerrenator[3].y;
+		source5Pos[2] = modelMatrixTerrenator[3].z;
+		alSourcefv(source[5], AL_POSITION, source5Pos);
+
 		// Listener for the Thris person camera
 		/*listenerPos[0] = modelMatrixMayow[3].x;
 		listenerPos[1] = modelMatrixMayow[3].y;
@@ -2407,10 +2485,11 @@ void applicationLoop() {
 		listenerOri[5] = camera->getUp().z;
 		alListenerfv(AL_ORIENTATION, listenerOri);
 
-		for(unsigned int i = 0; i < sourcesPlay.size(); i++){
+		for(unsigned int i = 0; i < 4; i++){
 			if(sourcesPlay[i]){
 				sourcesPlay[i] = false;
 				alSourcePlay(source[i]);
+				
 			}
 		}
 	}
