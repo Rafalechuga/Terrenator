@@ -119,6 +119,8 @@ Model modelTerrenatorRearLeftWheel;
 Model modelTerrenatorRearRightWheel;
 Model modelTerrenatorVentana;
 
+//Finish line
+Model modelMeta;
 
 // Dart lego
 Model modelDartLegoBody;
@@ -209,6 +211,7 @@ glm::mat4 modelMatrixRock2 = glm::mat4(1.0f);
 glm::mat4 modelMatrixVictory = glm::mat4(1.0f);
 glm::mat4 modelMatrixVictory2 = glm::mat4(1.0f);
 glm::mat4 modelMatrixVictory3 = glm::mat4(1.0f);
+glm::mat4 modelMatrixMeta = glm::mat4(1.0f);
 
 
 
@@ -834,6 +837,11 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 
 	modelTerrenatorVentana.loadModel("../models/Terrenator/Terrenator_ventana.obj");
 	modelTerrenatorVentana.setShader(&shaderMulLighting);
+
+	// Finish Line
+	
+	modelMeta.loadModel("../models/finish_line/finish_line.fbx");
+	modelMeta.setShader(&shaderMulLighting);
 
 	// Dart Lego
 	modelDartLegoBody.loadModel("../models/LegoDart/LeoDart_body.obj");
@@ -1711,6 +1719,8 @@ void destroy() {
 	modelTerrenatorRearLeftWheel.destroy();
 	modelTerrenatorRearRightWheel.destroy();
 	modelTerrenatorVentana.destroy();
+
+	modelMeta.destroy();
 	
 	modelBarrel.destroy();
 	modelThreeWheels.destroy();
@@ -2083,6 +2093,9 @@ void applicationLoop() {
 	
 	modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-90.0f), glm::vec3(0, 1, 0));
 	modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(20.0f, 2.0f, -10.0f));
+
+	//modelMatrixTerrenator = glm::rotate(modelMatrixMeta, glm::radians(-90.0f), glm::vec3(0, 1, 0));
+	modelMatrixMeta = glm::translate(modelMatrixMeta, glm::vec3(10.0f, 2.0f, -20.0f));
 
 	modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(3.0, 0.0, 20.0));
 
@@ -2623,6 +2636,22 @@ void applicationLoop() {
 		TerrenatorCollider.c = glm::vec3(modelmatrixColliderTerrenator[3]);
 		addOrUpdateColliders(collidersOBB, "Terrenator", TerrenatorCollider, modelMatrixTerrenator);
 
+		// Collider de Meta
+		AbstractModel::OBB MetaCollider;
+		glm::mat4 modelmatrixColliderMeta = glm::mat4(modelMatrixMeta);
+		modelmatrixColliderMeta = glm::rotate(modelmatrixColliderMeta,
+			glm::radians(0.0f), glm::vec3(1, 0, 0));
+		// Set the orientation of collider before doing the scale
+		MetaCollider.u = glm::quat_cast(modelmatrixColliderMeta);
+		modelmatrixColliderMeta = glm::scale(modelmatrixColliderMeta, glm::vec3(1.021, 1.021, 1.021));
+		modelmatrixColliderMeta = glm::translate(modelmatrixColliderMeta,
+			glm::vec3(modelMeta.getObb().c.x,
+				modelMeta.getObb().c.y - 0.8f,
+				modelMeta.getObb().c.z));
+		MetaCollider.e = modelMeta.getObb().e * glm::vec3(0.6, 0.5, 0.5);
+		MetaCollider.c = glm::vec3(modelmatrixColliderMeta[3]);
+		addOrUpdateColliders(collidersOBB, "Meta", MetaCollider, modelMatrixMeta);
+
 		/*******************************************
 		 * Render de colliders
 		 *******************************************/
@@ -2980,6 +3009,9 @@ void prepareScene(){
 	modelTerrenatorRearRightWheel.setShader(&shaderMulLighting);
 	modelTerrenatorVentana.setShader(&shaderMulLighting);
 
+	//finish line
+	modelMeta.setShader(&shaderMulLighting);
+
 	// Dart Lego
 	modelDartLegoBody.setShader(&shaderMulLighting);
 	modelDartLegoMask.setShader(&shaderMulLighting);
@@ -3039,6 +3071,9 @@ void prepareDepthScene(){
 	modelTerrenatorRearLeftWheel.setShader(&shaderDepth);
 	modelTerrenatorRearRightWheel.setShader(&shaderDepth);
 	modelTerrenatorVentana.setShader(&shaderDepth);
+
+	// finish line
+	modelMeta.setShader(&shaderDepth);
 
 	// Dart Lego
 	modelDartLegoBody.setShader(&shaderDepth);
@@ -3203,6 +3238,14 @@ void renderScene(bool renderParticles){
 
 	modelTerrenatorRearLeftWheel.render(modelMatrixTerrenatorChasis);
 	modelTerrenatorRearRightWheel.render(modelMatrixTerrenatorChasis);
+	glEnable(GL_CULL_FACE);
+
+	//Meta
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelMatrixMetaBody = glm::mat4(modelMatrixMeta);
+	//modelMatrixMetaBody = glm::scale(modelMatrixMetaBody, glm::vec3(0.5, 0.5, 0.5));
+	modelMeta.render(modelMatrixMetaBody);
+	glEnable(GL_CULL_FACE);
 
 	//Barrel
 	glDisable(GL_CULL_FACE);
