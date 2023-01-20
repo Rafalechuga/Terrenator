@@ -1600,7 +1600,14 @@ bool processInput(bool continueApplication) {
 		}
 	}
 	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, -0.02));
+		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, -0.11));
+		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			&& abs(axes[0]) < 0.02f) {
+			if (rotWheelsY < 0.0f)
+				rotWheelsY += 0.02;
+			if (rotWheelsY > 0.0f)
+				rotWheelsY -= 0.02;
+		}
 	}
 
 	// Dart Lego model movements
@@ -1697,7 +1704,9 @@ void applicationLoop() {
 
 	modelMatrixLambo = glm::translate(modelMatrixLambo, glm::vec3(23.0, 0.0, 0.0));
 
-	modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(20.0f, 2.0f, -5.0f));
+	
+	modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-90.0f), glm::vec3(0, 1, 0));
+	modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(20.0f, 2.0f, -10.0f));
 
 	modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(3.0, 0.0, 20.0));
 
@@ -2125,6 +2134,22 @@ void applicationLoop() {
 		mayowCollider.c = glm::vec3(modelmatrixColliderMayow[3]);
 		addOrUpdateColliders(collidersOBB, "mayow", mayowCollider, modelMatrixMayow);
 
+		// Collider de Terrenator
+		AbstractModel::OBB TerrenatorCollider;
+		glm::mat4 modelmatrixColliderTerrenator = glm::mat4(modelMatrixTerrenator);
+		modelmatrixColliderTerrenator = glm::rotate(modelmatrixColliderTerrenator,
+			glm::radians(0.0f), glm::vec3(1, 0, 0));
+		// Set the orientation of collider before doing the scale
+		TerrenatorCollider.u = glm::quat_cast(modelmatrixColliderTerrenator);
+		modelmatrixColliderTerrenator = glm::scale(modelmatrixColliderTerrenator, glm::vec3(1.021, 1.021, 1.021));
+		modelmatrixColliderTerrenator = glm::translate(modelmatrixColliderTerrenator,
+			glm::vec3(modelTerrenator.getObb().c.x,
+					modelTerrenator.getObb().c.y - 0.8f,
+					modelTerrenator.getObb().c.z));
+		TerrenatorCollider.e = modelTerrenator.getObb().e * glm::vec3(0.6, 0.5, 0.5);
+		TerrenatorCollider.c = glm::vec3(modelmatrixColliderTerrenator[3]);
+		addOrUpdateColliders(collidersOBB, "Terrenator", TerrenatorCollider, modelMatrixTerrenator);
+
 		/*******************************************
 		 * Render de colliders
 		 *******************************************/
@@ -2179,7 +2204,7 @@ void applicationLoop() {
 			for (std::map<std::string,
 					std::tuple<AbstractModel::OBB, glm::mat4, glm::mat4> >::iterator jt =
 					collidersOBB.begin(); jt != collidersOBB.end(); jt++) {
-				if (it != jt
+				if (it != jt && it->first.find("guardrail") != 0
 						&& testOBBOBB(std::get<0>(it->second),
 								std::get<0>(jt->second))) {
 					std::cout << "Colision " << it->first << " with "
@@ -2248,6 +2273,8 @@ void applicationLoop() {
 						modelMatrixMayow = std::get<1>(jt->second);
 					if (jt->first.compare("dart") == 0)
 						modelMatrixDart = std::get<1>(jt->second);
+					if (jt->first.compare("Terrenator") == 0)
+						modelMatrixTerrenator = std::get<1>(jt->second);
 				}
 			}
 		}
