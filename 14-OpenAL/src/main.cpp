@@ -403,7 +403,10 @@ std::vector<glm::vec3> guardrailPosition1 =
 	glm::vec3(6.31, 0.0, -2.62),
 	glm::vec3(-6.31, 0.0, -2.62),
 
-	glm::vec3(-12.62, 0.0, 3.69)
+	glm::vec3(-12.62, 0.0, 3.69),
+	
+	glm::vec3(36.86, 0.0, 24.69),		//No retorno
+	glm::vec3(36.86, 0.0, 16.07),
 };
 std::vector<float> guardrailOrientation1 = { 
 	//Interior
@@ -424,7 +427,8 @@ std::vector<float> guardrailOrientation1 = {
 	 0.0,    0.0,   0.0,    0.0,   0.0,    0.0,   0.0,    0.0,  0.0,   0.0,    0.0,   0.0,
    -90.0,  -90.0, -90.0,  -90.0, -90.0,  -90.0,
    180.0,  180.0, 180.0,  180.0, 180.0,  180.0, 180.0,
-    90.0
+    90.0,
+	90.0, 90
 };
 
 // Blending model unsorted
@@ -434,7 +438,8 @@ std::map<std::string, glm::vec3> blendingUnsorted = {
 		{"heli", glm::vec3(5.0, 10.0, -5.0)},
 		{"fountain", glm::vec3(5.0, 0.0, -40.0)},
 		{"fire", glm::vec3(0.0, 0.0, 7.0)},
-		{"lluvia", glm::vec3(0.0, 0.0, 0.0)}
+		{"lluvia", glm::vec3(0.0, 0.0, 0.0)},
+		{"ventana", glm::vec3(0.0, 0.0, 0.0)}
 };
 
 double deltaTime;
@@ -804,6 +809,9 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelTerrenatorRearLeftWheel.setShader(&shaderMulLighting);
 	modelTerrenatorRearRightWheel.loadModel("../models/Terrenator/Terrenator_rearRightWheel.obj");
 	modelTerrenatorRearRightWheel.setShader(&shaderMulLighting);
+
+	modelTerrenatorVentana.loadModel("../models/Terrenator/Terrenator_ventana.obj");
+	modelTerrenatorVentana.setShader(&shaderMulLighting);
 
 	// Dart Lego
 	modelDartLegoBody.loadModel("../models/LegoDart/LeoDart_body.obj");
@@ -1640,6 +1648,7 @@ void destroy() {
 	modelTerrenatorFrontRightWheel.destroy();
 	modelTerrenatorRearLeftWheel.destroy();
 	modelTerrenatorRearRightWheel.destroy();
+	modelTerrenatorVentana.destroy();
 	
 	modelBarrel.destroy();
 	modelThreeWheels.destroy();
@@ -2736,6 +2745,7 @@ void prepareScene(){
 	modelTerrenatorFrontRightWheel.setShader(&shaderMulLighting);
 	modelTerrenatorRearLeftWheel.setShader(&shaderMulLighting);
 	modelTerrenatorRearRightWheel.setShader(&shaderMulLighting);
+	modelTerrenatorVentana.setShader(&shaderMulLighting);
 
 	// Dart Lego
 	modelDartLegoBody.setShader(&shaderMulLighting);
@@ -2795,6 +2805,7 @@ void prepareDepthScene(){
 	modelTerrenatorFrontRightWheel.setShader(&shaderDepth);
 	modelTerrenatorRearLeftWheel.setShader(&shaderDepth);
 	modelTerrenatorRearRightWheel.setShader(&shaderDepth);
+	modelTerrenatorVentana.setShader(&shaderDepth);
 
 	// Dart Lego
 	modelDartLegoBody.setShader(&shaderDepth);
