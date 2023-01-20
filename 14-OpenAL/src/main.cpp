@@ -136,6 +136,9 @@ Model modelThreeWheels;
 //Model rock2
 Model modelRock2;
 
+//Celebrate
+Model victoryModelAnimate;
+
 
 
 // Terrain model instance
@@ -179,6 +182,7 @@ glm::mat4 modelMatrixFountain = glm::mat4(1.0f);
 glm::mat4 modelMatrixBarrel = glm::mat4(1.0f);
 glm::mat4 modelMatrixThreeWheels = glm::mat4(1.0f);
 glm::mat4 modelMatrixRock2 = glm::mat4(1.0f);
+glm::mat4 modelMatrixVictory = glm::mat4(1.0f);
 
 int animationIndex = 1;
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
@@ -637,6 +641,10 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//Rock2
 	modelRock2.loadModel("../models/rock/rock2/CavePlatform1_Fbx.fbx");
 	modelRock2.setShader(&shaderMulLighting);
+
+	////Victory
+	//victoryModelAnimate.loadModel("../models/victory/victory.fbx");
+	//victoryModelAnimate.setShader(&shaderMulLighting);
 
 	camera->setPosition(glm::vec3(0.0, 0.0, 10.0));
 	camera->setDistanceFromTarget(distanceFromTarget);
@@ -1229,6 +1237,7 @@ void destroy() {
 	modelBarrel.destroy();
 	modelThreeWheels.destroy();
 	modelRock2.destroy();
+	victoryModelAnimate.destroy();
 
 	// Custom objects animate
 	mayowModelAnimate.destroy();
@@ -2371,6 +2380,19 @@ void renderScene(bool renderParticles){
 	model3Wheels = glm::scale(model3Wheels, glm::vec3(0.06f, 0.06f, 0.06f));
 	modelThreeWheels.render(model3Wheels);
 	glEnable(GL_CULL_FACE);
+
+	//Victory
+	/*glDisable(GL_CULL_FACE);
+	glm::mat4 modelVictory = glm::mat4(modelMatrixVictory);*/
+	/*modelVictory = translate(modelVictory, glm::vec3(-0.023515, 1.0, 0.446066));
+	modelVictory = glm::rotate(modelVictory, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	modelVictory = glm::scale(modelVictory, glm::vec3(1.0f, 1.0f, 1.0f));*/
+	//victoryModelAnimate.render(modelVictory);
+	//glEnable(GL_CULL_FACE);
+	//glm::mat4 modelMatrixVictoryBody = glm::mat4(modelMatrixVictory);
+	////modelMatrixVictoryBody = glm::scale(modelMatrixVictoryBody, glm::vec3(0.021, 0.021, 0.021));
+	//victoryModelAnimate.setAnimationIndex(animationIndex);
+	//victoryModelAnimate.render(modelMatrixVictoryBody);
 
 	//Rock2
 	glDisable(GL_CULL_FACE);
