@@ -211,6 +211,7 @@ glm::mat4 modelMatrixVictory2 = glm::mat4(1.0f);
 glm::mat4 modelMatrixVictory3 = glm::mat4(1.0f);
 
 
+
 int animationIndex = 1;
 float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
 int modelSelected = 1;
@@ -242,6 +243,9 @@ float rotHelHelY = 0.0;
 // Var animate lambo dor
 int stateDoor = 0;
 float dorRotCount = 0.0;
+
+//vidas
+int vidas = 3;
 
 // giro Terrenator
 float rotWheelsX = 0.0;
@@ -444,6 +448,7 @@ std::map<std::string, glm::vec3> blendingUnsorted = {
 
 double deltaTime;
 double currTime, lastTime;
+double ultimoChoque;
 
 // Jump variables
 bool isJump = false;
@@ -1807,6 +1812,12 @@ bool processInput(bool continueApplication) {
 	}
 
 	if (!iniciaPartida) {
+		
+		if (sourcesPlay[3]) {
+			sourcesPlay[3] = false;
+			alSourcePlay(source[3]);
+		}
+		
 		bool statusEnter = glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS;
 		if ( texturaActivaID == textureInicio0ID && statusEnter ) {
 			iniciaPartida = true;
@@ -2224,7 +2235,7 @@ void applicationLoop() {
 		shaderMulLighting.setVectorFloat3("directionalLight.light.ambient", glm::value_ptr(glm::vec3(0.002, 0.002, 0.002)));
 		shaderMulLighting.setVectorFloat3("directionalLight.light.diffuse", glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
 		shaderMulLighting.setVectorFloat3("directionalLight.light.specular", glm::value_ptr(glm::vec3(0.2, 0.2, 0.2)));
-		shaderMulLighting.setVectorFloat3("directionalLight.direction", glm::value_ptr(glm::vec3(-1.0, 0.0, 0.0)));
+		shaderMulLighting.setVectorFloat3("directionalLight.direction", glm::value_ptr(glm::vec3(-0.707106781, -0.707106781, 0.0)));
 
 		/*******************************************
 		 * Propiedades Luz direccional Terrain
@@ -2233,7 +2244,7 @@ void applicationLoop() {
 		shaderTerrain.setVectorFloat3("directionalLight.light.ambient", glm::value_ptr(glm::vec3(0.002, 0.002, 0.002)));
 		shaderTerrain.setVectorFloat3("directionalLight.light.diffuse", glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
 		shaderTerrain.setVectorFloat3("directionalLight.light.specular", glm::value_ptr(glm::vec3(0.2, 0.2, 0.2)));
-		shaderTerrain.setVectorFloat3("directionalLight.direction", glm::value_ptr(glm::vec3(-1.0, 0.0, 0.0)));
+		shaderTerrain.setVectorFloat3("directionalLight.direction", glm::value_ptr(glm::vec3(-0.707106781, -0.707106781, 0.0)));
 
 		/*******************************************
 		 * Propiedades SpotLights
@@ -2673,6 +2684,7 @@ void applicationLoop() {
 							<< jt->first << std::endl;
 					isCollision = true;
 				}
+				
 			}
 			if (it->first.compare("Terrenator") == 0 && isCollision == false) {
 				sourcesPlay[6] = true;
@@ -2737,15 +2749,23 @@ void applicationLoop() {
 					addOrUpdateColliders(collidersOBB, jt->first);
 				}
 				else {
-					if (jt->first.compare("mayow") == 0)
+					if ((jt->first.compare("mayow") == 0) && iniciaPartida)
 						modelMatrixMayow = std::get<1>(jt->second);
-					if (jt->first.compare("dart") == 0)
+					if ((jt->first.compare("dart") == 0) && iniciaPartida)
 						modelMatrixDart = std::get<1>(jt->second);
-					if (jt->first.compare("Terrenator") == 0) {
+					if ((jt->first.compare("Terrenator") == 0) && iniciaPartida) {
+						/*if ((currTime - ultimoChoque) > 3.0f) {
+							ultimoChoque = currTime;
+							alSourcePlay(source[6]);
+							vidas = vidas - 1;
+						}*/
+						
 						if (sourcesPlay[6]) {
 							sourcesPlay[6] = false;
 							alSourcePlay(source[6]);
+							vidas = vidas - 1;
 						}
+						
 						modelMatrixTerrenator = std::get<1>(jt->second);
 						
 					}
@@ -2837,7 +2857,20 @@ void applicationLoop() {
 		}
 
 		glEnable(GL_BLEND);
-		textLifeRender->render("                              Vidas: 3", 0.0 ,0.0, 30.0, 1.0, 0.0, 0.0);
+		switch (vidas) {
+			case 3:
+				textLifeRender->render("                              Vidas: 3", 0.0, 0.0, 30.0, 1.0, 0.0, 0.0);
+				break;
+			case 2:
+				textLifeRender->render("                              Vidas: 2", 0.0, 0.0, 30.0, 1.0, 0.0, 0.0);
+				break;
+			case 1:
+				textLifeRender->render("                              Vidas: 1", 0.0, 0.0, 30.0, 1.0, 0.0, 0.0);
+				break;
+			default:
+				textLifeRender->render("                              PERDISTE", 0.0, 0.0, 30.0, 1.0, 0.0, 0.0);
+				break;
+		}
 		glDisable(GL_BLEND);
 		glfwSwapBuffers(window);
 
@@ -2906,7 +2939,7 @@ void applicationLoop() {
 		listenerOri[5] = camera->getUp().z;
 		alListenerfv(AL_ORIENTATION, listenerOri);
 
-		for(unsigned int i = 0; i < 4; i++){
+		for(unsigned int i = 0; i < 3; i++){
 			if(sourcesPlay[i]){
 				sourcesPlay[i] = false;
 				alSourcePlay(source[i]);
