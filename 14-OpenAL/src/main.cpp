@@ -1705,56 +1705,6 @@ bool processInput(bool continueApplication) {
 		return false;
 	}
 
-	if (!iniciaPartida) {
-		
-		if (sourcesPlay[3]) {
-			sourcesPlay[3] = false;
-			alSourcePlay(source[3]);
-		}
-		
-		bool statusEnter = glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS;
-		if ( texturaActivaID == textureInicio0ID && statusEnter ) {
-			iniciaPartida = true;
-		} else if (texturaActivaID == textureInicio1ID && statusEnter) {
-			texturaActivaID = textureControlID;
-		}
-		else if (texturaActivaID == textureInicio2ID && statusEnter) {
-			texturaActivaID = textureCreditosID;
-		}
-
-		if (!presionarOpcion && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-			presionarOpcion = true;
-			
-			if( seleccionTextura < 2 )
-				seleccionTextura++;
-
-			switch (seleccionTextura)
-			{
-			case 0: texturaActivaID = textureInicio0ID; break;
-			case 1: texturaActivaID = textureInicio1ID; break;
-			case 2: texturaActivaID = textureInicio2ID; break;
-			default: break;
-			}
-		} else if (!presionarOpcion && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
-			presionarOpcion = true;
-
-			if (seleccionTextura > 0)
-				seleccionTextura--;
-
-			switch (seleccionTextura)
-			{
-			case 0: texturaActivaID = textureInicio0ID; break;
-			case 1: texturaActivaID = textureInicio1ID; break;
-			case 2: texturaActivaID = textureInicio2ID; break;
-			default: break;
-			}
-		}  else  if (presionarOpcion  && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE && glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE ) {
-			presionarOpcion = false;
-		}
-
-		
-	}
-
 	const float* axes = nullptr;
 	const unsigned char* botones = nullptr;
 	//para control xbox one
@@ -1770,6 +1720,58 @@ bool processInput(bool continueApplication) {
 		botones = auxbotones;
 	}
 
+	if (!iniciaPartida) {
+		
+		if (sourcesPlay[3]) {
+			sourcesPlay[3] = false;
+			alSourcePlay(source[3]);
+		}
+		
+		bool statusEnter = (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS || botones[0] == GLFW_PRESS);
+		if ( texturaActivaID == textureInicio0ID && statusEnter ) {
+			iniciaPartida = true;
+		} else if (texturaActivaID == textureInicio1ID && statusEnter) {
+			texturaActivaID = textureControlID;
+		}
+		else if (texturaActivaID == textureInicio2ID && statusEnter) {
+			texturaActivaID = textureCreditosID;
+		}
+
+		if (!presionarOpcion && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || axes[1] < -0.2f)) {
+			presionarOpcion = true;
+			
+			if( seleccionTextura < 2 )
+				seleccionTextura++;
+
+			switch (seleccionTextura)
+			{
+			case 0: texturaActivaID = textureInicio0ID; break;
+			case 1: texturaActivaID = textureInicio1ID; break;
+			case 2: texturaActivaID = textureInicio2ID; break;
+			default: break;
+			}
+		} else if (!presionarOpcion && (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || axes[1] > 0.2f)) {
+			presionarOpcion = true;
+
+			if (seleccionTextura > 0)
+				seleccionTextura--;
+
+			switch (seleccionTextura)
+			{
+			case 0: texturaActivaID = textureInicio0ID; break;
+			case 1: texturaActivaID = textureInicio1ID; break;
+			case 2: texturaActivaID = textureInicio2ID; break;
+			default: break;
+			}
+		}  else  if (presionarOpcion  && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_RELEASE
+			&& glfwGetKey(window, GLFW_KEY_UP) == GLFW_RELEASE && abs(axes[1]) < 0.02f) {
+			presionarOpcion = false;
+		}
+
+		
+	}
+
+	
 	if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS)
 		camera->mouseMoveCamera(offsetX, 0.0, deltaTime);
 	if(glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_RIGHT) == GLFW_PRESS)
@@ -1793,8 +1795,8 @@ bool processInput(bool continueApplication) {
 		enableCountSelected = true;
 
 	//Terreneitor
-	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || axes[0] < -0.2f)){
-		if (!(modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) {
+	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || axes[0] < -0.2f)) {
+		if (!(modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) || botones[2] == GLFW_PRESS)) {
 			modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(1.0f), glm::vec3(0, 1, 0));
 		}
 		else {
@@ -1804,10 +1806,10 @@ bool processInput(bool continueApplication) {
 		rotWheelsY += 0.02;
 		if (rotWheelsY > 0.44f)
 			rotWheelsY = 0.44f;
-		
+
 	}
 	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || axes[0] > 0.2f)) {
-		if (!(modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) {
+		if (!(modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) || botones[2] == GLFW_PRESS)) {
 			modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-1.0f), glm::vec3(0, 1, 0));
 		}
 		else {
@@ -1819,7 +1821,7 @@ bool processInput(bool continueApplication) {
 			rotWheelsY = -0.44f;
 	}if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || botones[0] == GLFW_PRESS)) {
 		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 0.22));
-		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) &&!(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 			&& abs(axes[0]) < 0.02f) {
 			if (rotWheelsY < 0.0f)
 				rotWheelsY += 0.02;
@@ -1840,17 +1842,18 @@ bool processInput(bool continueApplication) {
 		if (!sourcesPlay[4]) {
 			sourcesPlay[4] = true;
 			alSourceStop(source[4]);
-			
+
 		}
-		if(sourcesPlay[5] && iniciaPartida){
+		if (sourcesPlay[5] && iniciaPartida) {
 			alSourcePlay(source[5]);
 			sourcesPlay[5] = false;
 		}
 	}
 
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || botones[2] == GLFW_PRESS)) {
 		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, -0.11));
-		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+			&& !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 			&& abs(axes[0]) < 0.02f) {
 			if (rotWheelsY < 0.0f)
 				rotWheelsY += 0.02;
@@ -1859,8 +1862,8 @@ bool processInput(bool continueApplication) {
 		}
 	}
 
-	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS || botones[0] == GLFW_PRESS) &&
-		glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS || botones[1] == GLFW_PRESS) &&
+		(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || botones[0] == GLFW_PRESS)) {
 		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 2.22));
 		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
 			&& abs(axes[0]) < 0.02f) {
