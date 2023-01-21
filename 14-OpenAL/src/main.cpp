@@ -100,7 +100,7 @@ Box boxIntro;
 
 // Models complex instances
 Model modelRock;
-Model modelAircraft;
+
 
 // Terrenator
 Model modelTerrenator;
@@ -112,17 +112,7 @@ Model modelTerrenatorVentana;
 
 //Finish line
 Model modelMeta;
-
-// Dart lego
 Model modelDartLegoBody;
-Model modelDartLegoHead;
-Model modelDartLegoMask;
-Model modelDartLegoLeftArm;
-Model modelDartLegoRightArm;
-Model modelDartLegoLeftHand;
-Model modelDartLegoRightHand;
-Model modelDartLegoLeftLeg;
-Model modelDartLegoRightLeg;
 // Guardrail
 Model modelGuardrail0;
 Model modelGuardrail1;
@@ -130,9 +120,7 @@ Model modelGuardrail1;
 Model modelGrass;
 // Fountain
 Model modelFountain;
-// Model animate instance
-// Mayow
-Model mayowModelAnimate;
+
 //Model barrel
 Model modelBarrel;
 //Model wheels
@@ -142,10 +130,6 @@ Model modelRock2;
 
 //Celebrate
 Model victoryModelAnimate;
-Model victoryModelAnimate2;
-Model victoryModelAnimate3;
-
-
 
 // Terrain model instance
 Terrain terrain(-1, -1, 200, 16, "../Textures/heightmap_2.png");
@@ -184,9 +168,7 @@ int lastMousePosY, offsetY = 0;
 
 // Model matrix definitions
 glm::mat4 matrixModelRock = glm::mat4(1.0);
-glm::mat4 modelMatrixAircraft = glm::mat4(1.0);
 glm::mat4 modelMatrixDart = glm::mat4(1.0f);
-glm::mat4 modelMatrixMayow = glm::mat4(1.0f);
 glm::mat4 modelMatrixFountain = glm::mat4(1.0f);
 
 glm::mat4 modelMatrixTerrenator = glm::mat4(1.0f);
@@ -201,7 +183,6 @@ glm::mat4 modelMatrixMeta = glm::mat4(1.0f);
 
 
 int animationIndex = 1;
-float rotDartHead = 0.0, rotDartLeftArm = 0.0, rotDartLeftHand = 0.0, rotDartRightArm = 0.0, rotDartRightHand = 0.0, rotDartLeftLeg = 0.0, rotDartRightLeg = 0.0;
 int modelSelected = 1;
 bool enableCountSelected = true;
 
@@ -210,20 +191,6 @@ bool saveFrame = false, availableSave = true;
 std::ofstream myfile;
 std::string fileName = "";
 bool record = false;
-
-// Joints interpolations Dart Lego
-std::vector<std::vector<float>> keyFramesDartJoints;
-std::vector<std::vector<glm::mat4>> keyFramesDart;
-int indexFrameDartJoints = 0;
-int indexFrameDartJointsNext = 1;
-float interpolationDartJoints = 0.0;
-int maxNumPasosDartJoints = 20;
-int numPasosDartJoints = 0;
-int indexFrameDart = 0;
-int indexFrameDartNext = 1;
-float interpolationDart = 0.0;
-int maxNumPasosDart = 200;
-int numPasosDart = 0;
 
 
 //vidas
@@ -1626,16 +1593,7 @@ void destroy() {
 	terrain.destroy();
 
 	// Custom objects Delete
-	modelAircraft.destroy();
 	modelDartLegoBody.destroy();
-	modelDartLegoHead.destroy();
-	modelDartLegoLeftArm.destroy();
-	modelDartLegoLeftHand.destroy();
-	modelDartLegoLeftLeg.destroy();
-	modelDartLegoMask.destroy();
-	modelDartLegoRightArm.destroy();
-	modelDartLegoRightHand.destroy();
-	modelDartLegoRightLeg.destroy();
 	modelRock.destroy();
 
 	modelGuardrail0.destroy();
@@ -1657,12 +1615,6 @@ void destroy() {
 	modelThreeWheels.destroy();
 	modelRock2.destroy();
 	victoryModelAnimate.destroy();
-	victoryModelAnimate2.destroy();
-	victoryModelAnimate3.destroy();
-
-
-	// Custom objects animate
-	mayowModelAnimate.destroy();
 
 	// Textures Delete
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -1839,29 +1791,6 @@ bool processInput(bool continueApplication) {
 	else if(glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE)
 		enableCountSelected = true;
 
-	// Guardar key frames
-	if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS
-			&& glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
-		record = true;
-		if(myfile.is_open())
-			myfile.close();
-		myfile.open(fileName);
-	}
-	if(glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE
-			&& glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
-		record = false;
-		myfile.close();
-		if(modelSelected == 1)
-			keyFramesDartJoints = getKeyRotFrames(fileName);
-		if (modelSelected == 2)
-			keyFramesDart = getKeyFrames(fileName);
-	}
-	if(availableSave && glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS){
-		saveFrame = true;
-		availableSave = false;
-	}if(glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_RELEASE)
-		availableSave = true;
-
 	//Terreneitor
 	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || axes[0] < -0.2f)){
 		if (!(modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)) {
@@ -1941,73 +1870,6 @@ bool processInput(bool continueApplication) {
 
 		}
 	}
-	
-
-	// Dart Lego model movements
-	/*if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-		rotDartHead += 0.02;
-	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
-		rotDartHead -= 0.02;
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-		rotDartLeftArm += 0.02;
-	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
-		rotDartLeftArm -= 0.02;
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-		rotDartRightArm += 0.02;
-	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_3) == GLFW_PRESS)
-		rotDartRightArm -= 0.02;
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-		rotDartLeftHand += 0.02;
-	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_4) == GLFW_PRESS)
-		rotDartLeftHand -= 0.02;
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-		rotDartRightHand += 0.02;
-	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_5) == GLFW_PRESS)
-		rotDartRightHand -= 0.02;
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
-		rotDartLeftLeg += 0.02;
-	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_6) == GLFW_PRESS)
-		rotDartLeftLeg -= 0.02;
-	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
-			glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
-		rotDartRightLeg += 0.02;
-	else if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS &&
-			glfwGetKey(window, GLFW_KEY_7) == GLFW_PRESS)
-		rotDartRightLeg -= 0.02;
-	if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-		modelMatrixDart = glm::rotate(modelMatrixDart, 0.02f, glm::vec3(0, 1, 0));
-	else if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-		modelMatrixDart = glm::rotate(modelMatrixDart, -0.02f, glm::vec3(0, 1, 0));
-	if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
-		modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(-0.02, 0.0, 0.0));
-	else if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
-		modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(0.02, 0.0, 0.0));*/
-
-	if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
-		modelMatrixMayow = glm::rotate(modelMatrixMayow, glm::radians(4.0f), glm::vec3(0, 1, 0));
-		animationIndex = 0;
-	}else if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
-		modelMatrixMayow = glm::rotate(modelMatrixMayow, glm::radians(-4.0f), glm::vec3(0, 1, 0));
-		animationIndex = 0;
-	}if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
-		modelMatrixMayow = glm::translate(modelMatrixMayow, glm::vec3(0, 0, 0.52));
-		animationIndex = 0;
-	}else if (modelSelected == 2 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
-		modelMatrixMayow = glm::translate(modelMatrixMayow, glm::vec3(0, 0, -0.52));
-		animationIndex = 0;
-	}
 
 	bool keySpaceStatus = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
 	if(!isJump && keySpaceStatus){
@@ -2030,8 +1892,6 @@ void applicationLoop() {
 	
 
 	matrixModelRock = glm::translate(matrixModelRock, glm::vec3(-3.0, 0.0, 2.0));
-
-	modelMatrixAircraft = glm::translate(modelMatrixAircraft, glm::vec3(10.0, 2.0, -17.5));
 	
 	modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-90.0f), glm::vec3(0, 1, 0));
 	modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(20.0f, 2.0f, -10.0f));
@@ -2041,17 +1901,9 @@ void applicationLoop() {
 
 	modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(3.0, 0.0, 20.0));
 
-	modelMatrixMayow = glm::translate(modelMatrixMayow, glm::vec3(13.0f, 0.05f, -5.0f));
-	modelMatrixMayow = glm::rotate(modelMatrixMayow, glm::radians(-90.0f), glm::vec3(0, 1, 0));
-
 	modelMatrixFountain = glm::translate(modelMatrixFountain, glm::vec3(5.0, 0.0, -40.0));
 	modelMatrixFountain[3][1] = terrain.getHeightTerrain(modelMatrixFountain[3][0] , modelMatrixFountain[3][2]) + 0.2;
 	modelMatrixFountain = glm::scale(modelMatrixFountain, glm::vec3(10.0f, 10.0f, 10.0f));
-
-	// Variables to interpolation key frames
-	fileName = "../animaciones/animation_dart_joints.txt";
-	keyFramesDartJoints = getKeyRotFrames(fileName);
-	keyFramesDart = getKeyFrames("../animaciones/animation_dart.txt");
 
 	lastTime = TimeManager::Instance().GetTime();
 
@@ -2097,11 +1949,6 @@ void applicationLoop() {
 			axis = glm::axis(glm::quat_cast(modelMatrixTerrenator));
 			angleTarget = glm::angle(glm::quat_cast(modelMatrixTerrenator));
 			target = modelMatrixTerrenator[3];
-		}
-		else{
-			axis = glm::axis(glm::quat_cast(modelMatrixMayow));
-			angleTarget = glm::angle(glm::quat_cast(modelMatrixMayow));
-			target = modelMatrixMayow[3];
 		}
 
 		if(std::isnan(angleTarget))
@@ -2349,32 +2196,6 @@ void applicationLoop() {
 		 * Creacion de colliders
 		 * IMPORTANT do this before interpolations
 		 *******************************************/
-		// Collider del dart vader lego
-		glm::mat4 modelmatrixColliderDart = glm::mat4(modelMatrixDart);
-		AbstractModel::OBB dartLegoBodyCollider;
-		// Set the orientation of collider before doing the scale
-		dartLegoBodyCollider.u = glm::quat_cast(modelMatrixDart);
-		modelmatrixColliderDart = glm::scale(modelmatrixColliderDart, glm::vec3(0.5, 0.5, 0.5));
-		modelmatrixColliderDart = glm::translate(modelmatrixColliderDart,
-				glm::vec3(modelDartLegoBody.getObb().c.x,
-					modelDartLegoBody.getObb().c.y,
-					modelDartLegoBody.getObb().c.z));
-		dartLegoBodyCollider.c = glm::vec3(modelmatrixColliderDart[3]);
-		dartLegoBodyCollider.e = modelDartLegoBody.getObb().e * glm::vec3(0.5, 0.5, 0.5);
-		addOrUpdateColliders(collidersOBB, "dart", dartLegoBodyCollider, modelMatrixDart);
-
-		// Collider del aricraft
-		glm::mat4 modelMatrixColliderAircraft = glm::mat4(modelMatrixAircraft);
-		AbstractModel::OBB aircraftCollider;
-		// Set the orientation of collider before doing the scale
-		aircraftCollider.u = glm::quat_cast(modelMatrixAircraft);
-		modelMatrixColliderAircraft = glm::scale(modelMatrixColliderAircraft,
-				glm::vec3(1.0, 1.0, 1.0));
-		modelMatrixColliderAircraft = glm::translate(			
-				modelMatrixColliderAircraft, modelAircraft.getObb().c);
-		aircraftCollider.c = glm::vec3(modelMatrixColliderAircraft[3]);
-		aircraftCollider.e = modelAircraft.getObb().e * glm::vec3(1.0, 1.0, 1.0);
-		addOrUpdateColliders(collidersOBB, "aircraft", aircraftCollider, modelMatrixAircraft);
 
 		//Collider de barril 1
 		glm::mat4 modelmatrixColliderBarrel = glm::mat4(modelMatrixBarrel);
@@ -2642,22 +2463,6 @@ void applicationLoop() {
 			std::get<0>(collidersOBB.find("guardrail1-" + std::to_string(i))->second) = guardrailCollider;
 		}
 
-		// Collider de mayow
-		AbstractModel::OBB mayowCollider;
-		glm::mat4 modelmatrixColliderMayow = glm::mat4(modelMatrixMayow);
-		modelmatrixColliderMayow = glm::rotate(modelmatrixColliderMayow,
-				glm::radians(-90.0f), glm::vec3(1, 0, 0));
-		// Set the orientation of collider before doing the scale
-		mayowCollider.u = glm::quat_cast(modelmatrixColliderMayow);
-		modelmatrixColliderMayow = glm::scale(modelmatrixColliderMayow, glm::vec3(0.021, 0.021, 0.021));
-		modelmatrixColliderMayow = glm::translate(modelmatrixColliderMayow,
-				glm::vec3(mayowModelAnimate.getObb().c.x,
-						mayowModelAnimate.getObb().c.y,
-						mayowModelAnimate.getObb().c.z));
-		mayowCollider.e = mayowModelAnimate.getObb().e * glm::vec3(0.021, 0.021, 0.021) * glm::vec3(0.787401574, 0.787401574, 0.787401574);
-		mayowCollider.c = glm::vec3(modelmatrixColliderMayow[3]);
-		addOrUpdateColliders(collidersOBB, "mayow", mayowCollider, modelMatrixMayow);
-
 		// Collider de Terrenator
 		AbstractModel::OBB TerrenatorCollider;
 		glm::mat4 modelmatrixColliderTerrenator = glm::mat4(modelMatrixTerrenator);
@@ -2713,26 +2518,6 @@ void applicationLoop() {
 			sphereCollider.enableWireMode();
 			sphereCollider.render(matrixCollider);
 		}
-
-		// Esto es para ilustrar la transformacion inversa de los coliders
-		/*glm::vec3 cinv = glm::inverse(mayowCollider.u) * glm::vec4(rockCollider.c, 1.0);
-		glm::mat4 invColliderS = glm::mat4(1.0);
-		invColliderS = glm::translate(invColliderS, cinv);
-		invColliderS =  invColliderS * glm::mat4(mayowCollider.u);
-		invColliderS = glm::scale(invColliderS, glm::vec3(rockCollider.ratio * 2.0, rockCollider.ratio * 2.0, rockCollider.ratio * 2.0));
-		sphereCollider.setColor(glm::vec4(1.0, 1.0, 0.0, 1.0));
-		sphereCollider.enableWireMode();
-		sphereCollider.render(invColliderS);
-		glm::vec3 cinv2 = glm::inverse(mayowCollider.u) * glm::vec4(mayowCollider.c, 1.0);
-		glm::mat4 invColliderB = glm::mat4(1.0);
-		invColliderB = glm::translate(invColliderB, cinv2);
-		invColliderB = glm::scale(invColliderB, mayowCollider.e * 2.0f);
-		boxCollider.setColor(glm::vec4(1.0, 1.0, 0.0, 1.0));
-		boxCollider.enableWireMode();
-		boxCollider.render(invColliderB);
-		// Se regresa el color blanco
-		sphereCollider.setColor(glm::vec4(1.0, 1.0, 1.0, 1.0));
-		boxCollider.setColor(glm::vec4(1.0, 1.0, 1.0, 1.0));*/
 
 		/*******************************************
 		 * Test Colisions
@@ -2816,10 +2601,6 @@ void applicationLoop() {
 					addOrUpdateColliders(collidersOBB, jt->first);
 				}
 				else {
-					if ((jt->first.compare("mayow") == 0) && iniciaPartida)
-						modelMatrixMayow = std::get<1>(jt->second);
-					if ((jt->first.compare("dart") == 0) && iniciaPartida)
-						modelMatrixDart = std::get<1>(jt->second);
 					if ((jt->first.compare("Terrenator") == 0) && iniciaPartida) {
 						/*if ((currTime - ultimoChoque) > 3.0f) {
 							ultimoChoque = currTime;
@@ -2843,61 +2624,7 @@ void applicationLoop() {
 		/*******************************************
 		 * Interpolation key frames with disconect objects
 		 *******************************************/
-		if(record && modelSelected == 1){
-			matrixDartJoints.push_back(rotDartHead);
-			matrixDartJoints.push_back(rotDartLeftArm);
-			matrixDartJoints.push_back(rotDartLeftHand);
-			matrixDartJoints.push_back(rotDartRightArm);
-			matrixDartJoints.push_back(rotDartRightHand);
-			matrixDartJoints.push_back(rotDartLeftLeg);
-			matrixDartJoints.push_back(rotDartRightLeg);
-			if (saveFrame) {
-				appendFrame(myfile, matrixDartJoints);
-				saveFrame = false;
-			}
-		}
-		else if(keyFramesDartJoints.size() > 0){
-			// Para reproducir el frame
-			interpolationDartJoints = numPasosDartJoints / (float) maxNumPasosDartJoints;
-			numPasosDartJoints++;
-			if (interpolationDartJoints > 1.0) {
-				numPasosDartJoints = 0;
-				interpolationDartJoints = 0;
-				indexFrameDartJoints = indexFrameDartJointsNext;
-				indexFrameDartJointsNext++;
-			}
-			if (indexFrameDartJointsNext > keyFramesDartJoints.size() - 1)
-				indexFrameDartJointsNext = 0;
-			rotDartHead = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 0, interpolationDartJoints);
-			rotDartLeftArm = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 1, interpolationDartJoints);
-			rotDartLeftHand = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 2, interpolationDartJoints);
-			rotDartRightArm = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 3, interpolationDartJoints);
-			rotDartRightHand = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 4, interpolationDartJoints);
-			rotDartLeftLeg = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 5, interpolationDartJoints);
-			rotDartRightLeg = interpolate(keyFramesDartJoints, indexFrameDartJoints, indexFrameDartJointsNext, 6, interpolationDartJoints);
-		}
-
-		if (record && modelSelected == 2) {
-			matrixDart.push_back(modelMatrixDart);
-			if (saveFrame) {
-				appendFrame(myfile, matrixDart);
-				saveFrame = false;
-			}
-		}
-		else if (keyFramesDart.size() > 0) {
-			// Para reproducir el frame
-			interpolationDart = numPasosDart / (float)maxNumPasosDart;
-			numPasosDart++;
-			if (interpolationDart > 1.0) {
-				numPasosDart = 0;
-				interpolationDart = 0;
-				indexFrameDart = indexFrameDartNext;
-				indexFrameDartNext++;
-			}
-			if (indexFrameDartNext > keyFramesDart.size() - 1)
-				indexFrameDartNext = 0;
-			modelMatrixDart = interpolate(keyFramesDart, indexFrameDart, indexFrameDartNext, 0, interpolationDart);
-		}
+		
 
 		animationIndex = 1;
 
@@ -3004,8 +2731,6 @@ void prepareScene(){
 
 	modelRock.setShader(&shaderMulLighting);
 
-	modelAircraft.setShader(&shaderMulLighting);
-
 	terrain.setShader(&shaderTerrain);
 
 	// Terrenator
@@ -3021,14 +2746,6 @@ void prepareScene(){
 
 	// Dart Lego
 	modelDartLegoBody.setShader(&shaderMulLighting);
-	modelDartLegoMask.setShader(&shaderMulLighting);
-	modelDartLegoHead.setShader(&shaderMulLighting);
-	modelDartLegoLeftArm.setShader(&shaderMulLighting);
-	modelDartLegoRightArm.setShader(&shaderMulLighting);
-	modelDartLegoLeftHand.setShader(&shaderMulLighting);
-	modelDartLegoRightHand.setShader(&shaderMulLighting);
-	modelDartLegoLeftLeg.setShader(&shaderMulLighting);
-	modelDartLegoRightLeg.setShader(&shaderMulLighting);
 
 	//Guardrails
 	modelGuardrail0.setShader(&shaderMulLighting);
@@ -3037,11 +2754,14 @@ void prepareScene(){
 	//Grass
 	modelGrass.setShader(&shaderMulLighting);
 
-	//Mayow
-	mayowModelAnimate.setShader(&shaderMulLighting);
-
 	//Barrel
 	modelBarrel.setShader(&shaderMulLighting);
+
+	//Rock
+	modelRock2.setShader(&shaderMulLighting);
+
+	//Wheel
+	modelThreeWheels.setShader(&shaderMulLighting);
 }
 
 void prepareDepthScene(){
@@ -3049,8 +2769,6 @@ void prepareDepthScene(){
 	skyboxSphere.setShader(&shaderDepth);
 
 	modelRock.setShader(&shaderDepth);
-
-	modelAircraft.setShader(&shaderDepth);
 
 	terrain.setShader(&shaderDepth);
 
@@ -3067,14 +2785,6 @@ void prepareDepthScene(){
 
 	// Dart Lego
 	modelDartLegoBody.setShader(&shaderDepth);
-	modelDartLegoMask.setShader(&shaderDepth);
-	modelDartLegoHead.setShader(&shaderDepth);
-	modelDartLegoLeftArm.setShader(&shaderDepth);
-	modelDartLegoRightArm.setShader(&shaderDepth);
-	modelDartLegoLeftHand.setShader(&shaderDepth);
-	modelDartLegoRightHand.setShader(&shaderDepth);
-	modelDartLegoLeftLeg.setShader(&shaderDepth);
-	modelDartLegoRightLeg.setShader(&shaderDepth);
 
 	//Guardrials
 	modelGuardrail0.setShader(&shaderDepth);
@@ -3083,8 +2793,14 @@ void prepareDepthScene(){
 	//Grass
 	modelGrass.setShader(&shaderDepth);
 
-	//Mayow
-	mayowModelAnimate.setShader(&shaderDepth);
+	//Barrel
+	modelBarrel.setShader(&shaderDepth);
+
+	//Rock
+	modelRock2.setShader(&shaderDepth);
+
+	//Wheel
+	modelThreeWheels.setShader(&shaderDepth);
 }
 
 void renderScene(bool renderParticles){
@@ -3456,25 +3172,10 @@ void renderScene(bool renderParticles){
 	/*******************************************
 	 * Custom Anim objects obj
 	 *******************************************/
-	modelMatrixMayow[3][1] = -GRAVITY * tmv * tmv + 3.5 * tmv + terrain.getHeightTerrain(modelMatrixMayow[3][0], modelMatrixMayow[3][2]);
-	tmv = currTime - startTimeJump;
-	if(modelMatrixMayow[3][1] < terrain.getHeightTerrain(modelMatrixMayow[3][0], modelMatrixMayow[3][2])){
-		isJump = false;
-		modelMatrixMayow[3][1] = terrain.getHeightTerrain(modelMatrixMayow[3][0], modelMatrixMayow[3][2]);
-	}
-	//modelMatrixMayow[3][1] = terrain.getHeightTerrain(modelMatrixMayow[3][0], modelMatrixMayow[3][2]);
-	glm::mat4 modelMatrixMayowBody = glm::mat4(modelMatrixMayow);
-	modelMatrixMayowBody = glm::scale(modelMatrixMayowBody, glm::vec3(0.021, 0.021, 0.021));
-	mayowModelAnimate.setAnimationIndex(animationIndex);
-	mayowModelAnimate.render(modelMatrixMayowBody);
-
-	
 
 	/**********
 	 * Update the position with alpha objects
 	 */
-	// Update the aircraft
-	blendingUnsorted.find("aircraft")->second = glm::vec3(modelMatrixAircraft[3]);
 	// Update the Terrenator
 	//blendingUnsorted.find("Terrenator")->second = glm::vec3(modelMatrixTerrenator[3]);
 
@@ -3495,13 +3196,7 @@ void renderScene(bool renderParticles){
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDisable(GL_CULL_FACE);
 	for(std::map<float, std::pair<std::string, glm::vec3> >::reverse_iterator it = blendingSorted.rbegin(); it != blendingSorted.rend(); it++){
-		if(it->second.first.compare("aircraft") == 0){
-			// Render for the aircraft model
-			glm::mat4 modelMatrixAircraftBlend = glm::mat4(modelMatrixAircraft);
-			modelMatrixAircraftBlend[3][1] = terrain.getHeightTerrain(modelMatrixAircraftBlend[3][0], modelMatrixAircraftBlend[3][2]) + 2.0;
-			modelAircraft.render(modelMatrixAircraftBlend);
-		}
-		else if(renderParticles && it->second.first.compare("fountain") == 0){
+		if(renderParticles && it->second.first.compare("fountain") == 0){
 			/**********
 			 * Init Render particles systems
 			 */
