@@ -101,9 +101,6 @@ Box boxIntro;
 // Models complex instances
 Model modelRock;
 Model modelAircraft;
-Model modelHeliChasis;
-Model modelHeliHeli;
-
 
 // Terrenator
 Model modelTerrenator;
@@ -191,7 +188,6 @@ int lastMousePosY, offsetY = 0;
 
 // Model matrix definitions
 glm::mat4 matrixModelRock = glm::mat4(1.0);
-glm::mat4 modelMatrixHeli = glm::mat4(1.0f);
 glm::mat4 modelMatrixAircraft = glm::mat4(1.0);
 glm::mat4 modelMatrixDart = glm::mat4(1.0f);
 glm::mat4 modelMatrixMayow = glm::mat4(1.0f);
@@ -233,8 +229,6 @@ float interpolationDart = 0.0;
 int maxNumPasosDart = 200;
 int numPasosDart = 0;
 
-// Var animate helicopter
-float rotHelHelY = 0.0;
 
 //vidas
 int vidas = 3;
@@ -430,7 +424,6 @@ std::vector<float> guardrailOrientation1 = {
 // Blending model unsorted
 std::map<std::string, glm::vec3> blendingUnsorted = {
 		{"aircraft", glm::vec3(10.0, 0.0, -17.5)},
-		{"heli", glm::vec3(5.0, 10.0, -5.0)},
 		{"fountain", glm::vec3(5.0, 0.0, -40.0)},
 		{"fire", glm::vec3(0.0, 0.0, 7.0)},
 		{"lluvia", glm::vec3(0.0, 0.0, 0.0)},
@@ -790,11 +783,6 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	terrain.setShader(&shaderTerrain);
 	terrain.setPosition(glm::vec3(100, 0, 100));
 
-	//// Helicopter
-	//modelHeliChasis.loadModel("../models/Helicopter/Mi_24_chasis.obj");
-	//modelHeliChasis.setShader(&shaderMulLighting);
-	//modelHeliHeli.loadModel("../models/Helicopter/Mi_24_heli.obj");
-	//modelHeliHeli.setShader(&shaderMulLighting);
 
 
 	// Terrenator
@@ -1668,8 +1656,6 @@ void destroy() {
 	modelDartLegoRightArm.destroy();
 	modelDartLegoRightHand.destroy();
 	modelDartLegoRightLeg.destroy();
-	modelHeliChasis.destroy();
-	modelHeliHeli.destroy();
 	modelRock.destroy();
 	modelLamp1.destroy();
 	modelLamp2.destroy();
@@ -2068,8 +2054,6 @@ void applicationLoop() {
 
 	matrixModelRock = glm::translate(matrixModelRock, glm::vec3(-3.0, 0.0, 2.0));
 
-	modelMatrixHeli = glm::translate(modelMatrixHeli, glm::vec3(5.0, 10.0, -5.0));
-
 	modelMatrixAircraft = glm::translate(modelMatrixAircraft, glm::vec3(10.0, 2.0, -17.5));
 	
 	modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-90.0f), glm::vec3(0, 1, 0));
@@ -2243,29 +2227,6 @@ void applicationLoop() {
 		/*******************************************
 		 * Propiedades SpotLights
 		 *******************************************/
-		glm::vec3 spotPosition = glm::vec3(modelMatrixHeli * glm::vec4(0.32437, 0.226053, 1.79149, 1.0));
-		shaderMulLighting.setInt("spotLightCount", 3);
-		shaderTerrain.setInt("spotLightCount", 3);
-		shaderMulLighting.setVectorFloat3("spotLights[0].light.ambient", glm::value_ptr(glm::vec3(0.0, 0.0, 0.0)));
-		shaderMulLighting.setVectorFloat3("spotLights[0].light.diffuse", glm::value_ptr(glm::vec3(0.2, 0.3, 0.2)));
-		shaderMulLighting.setVectorFloat3("spotLights[0].light.specular", glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
-		shaderMulLighting.setVectorFloat3("spotLights[0].position", glm::value_ptr(spotPosition));
-		shaderMulLighting.setVectorFloat3("spotLights[0].direction", glm::value_ptr(glm::vec3(0, -1, 0)));
-		shaderMulLighting.setFloat("spotLights[0].constant", 1.0);
-		shaderMulLighting.setFloat("spotLights[0].linear", 0.074);
-		shaderMulLighting.setFloat("spotLights[0].quadratic", 0.03);
-		shaderMulLighting.setFloat("spotLights[0].cutOff", cos(glm::radians(12.5f)));
-		shaderMulLighting.setFloat("spotLights[0].outerCutOff", cos(glm::radians(15.0f)));
-		shaderTerrain.setVectorFloat3("spotLights[0].light.ambient", glm::value_ptr(glm::vec3(0.0, 0.0, 0.0)));
-		shaderTerrain.setVectorFloat3("spotLights[0].light.diffuse", glm::value_ptr(glm::vec3(0.2, 0.3, 0.2)));
-		shaderTerrain.setVectorFloat3("spotLights[0].light.specular", glm::value_ptr(glm::vec3(0.3, 0.3, 0.3)));
-		shaderTerrain.setVectorFloat3("spotLights[0].position", glm::value_ptr(spotPosition));
-		shaderTerrain.setVectorFloat3("spotLights[0].direction", glm::value_ptr(glm::vec3(0, -1, 0)));
-		shaderTerrain.setFloat("spotLights[0].constant", 1.0);
-		shaderTerrain.setFloat("spotLights[0].linear", 0.074);
-		shaderTerrain.setFloat("spotLights[0].quadratic", 0.03);
-		shaderTerrain.setFloat("spotLights[0].cutOff", cos(glm::radians(12.5f)));
-		shaderTerrain.setFloat("spotLights[0].outerCutOff", cos(glm::radians(15.0f)));
 
 		glm::mat4 spotPositionTerrenator1 = modelMatrixTerrenator;
 		glm::mat4 spotPositionTerrenator2 = modelMatrixTerrenator;
@@ -3043,8 +3004,6 @@ void applicationLoop() {
 			modelMatrixDart = interpolate(keyFramesDart, indexFrameDart, indexFrameDartNext, 0, interpolationDart);
 		}
 
-		// Constantes de animaciones
-		rotHelHelY += 0.5;
 		animationIndex = 1;
 
 		/*******************************************
@@ -3083,8 +3042,6 @@ void applicationLoop() {
 		source2Pos[1] = modelMatrixDart[3].y;
 		source2Pos[2] = modelMatrixDart[3].z;
 		alSourcefv(source[2], AL_POSITION, source2Pos);
-
-		
 
 		source3Pos[0] = camera->getPosition().x;
 		source3Pos[1] = camera->getPosition().y;
@@ -3156,10 +3113,6 @@ void prepareScene(){
 
 	terrain.setShader(&shaderTerrain);
 
-	// Helicopter
-	modelHeliChasis.setShader(&shaderMulLighting);
-	modelHeliHeli.setShader(&shaderMulLighting);
-
 	// Terrenator
 	modelTerrenator.setShader(&shaderMulLighting);
 	modelTerrenatorFrontLeftWheel.setShader(&shaderMulLighting);
@@ -3210,10 +3163,6 @@ void prepareDepthScene(){
 	modelAircraft.setShader(&shaderDepth);
 
 	terrain.setShader(&shaderDepth);
-
-	// Helicopter
-	modelHeliChasis.setShader(&shaderDepth);
-	modelHeliHeli.setShader(&shaderDepth);
 
 	// Terrenator
 	modelTerrenator.setShader(&shaderDepth);
@@ -3664,8 +3613,6 @@ void renderScene(bool renderParticles){
 	blendingUnsorted.find("aircraft")->second = glm::vec3(modelMatrixAircraft[3]);
 	// Update the Terrenator
 	//blendingUnsorted.find("Terrenator")->second = glm::vec3(modelMatrixTerrenator[3]);
-	// Update the helicopter
-	blendingUnsorted.find("heli")->second = glm::vec3(modelMatrixHeli[3]);
 
 	/**********
 	 * Sorter with alpha objects
@@ -3689,17 +3636,6 @@ void renderScene(bool renderParticles){
 			glm::mat4 modelMatrixAircraftBlend = glm::mat4(modelMatrixAircraft);
 			modelMatrixAircraftBlend[3][1] = terrain.getHeightTerrain(modelMatrixAircraftBlend[3][0], modelMatrixAircraftBlend[3][2]) + 2.0;
 			modelAircraft.render(modelMatrixAircraftBlend);
-		}
-		else if(it->second.first.compare("heli") == 0){
-			// Helicopter
-			glm::mat4 modelMatrixHeliChasis = glm::mat4(modelMatrixHeli);
-			modelHeliChasis.render(modelMatrixHeliChasis);
-
-			glm::mat4 modelMatrixHeliHeli = glm::mat4(modelMatrixHeliChasis);
-			modelMatrixHeliHeli = glm::translate(modelMatrixHeliHeli, glm::vec3(0.0, 0.0, -0.249548));
-			modelMatrixHeliHeli = glm::rotate(modelMatrixHeliHeli, rotHelHelY, glm::vec3(0, 1, 0));
-			modelMatrixHeliHeli = glm::translate(modelMatrixHeliHeli, glm::vec3(0.0, 0.0, 0.249548));
-			modelHeliHeli.render(modelMatrixHeliHeli);
 		}
 		else if(renderParticles && it->second.first.compare("fountain") == 0){
 			/**********
