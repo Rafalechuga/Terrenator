@@ -1795,91 +1795,93 @@ bool processInput(bool continueApplication) {
 		enableCountSelected = true;
 
 	//Terreneitor
-	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || axes[0] < -0.2f)) {
-		if (!(modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) || botones[2] == GLFW_PRESS)) {
-			modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(1.0f), glm::vec3(0, 1, 0));
+	if (iniciaPartida) {
+		if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS || axes[0] < -0.2f)) {
+			if (!(modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) || botones[2] == GLFW_PRESS)) {
+				modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(1.0f), glm::vec3(0, 1, 0));
+			}
+			else {
+				modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-1.0f), glm::vec3(0, 1, 0));
+			}
+			rotWheelsX += 0.05;
+			rotWheelsY += 0.02;
+			if (rotWheelsY > 0.44f)
+				rotWheelsY = 0.44f;
+
 		}
+		if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || axes[0] > 0.2f)) {
+			if (!(modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) || botones[2] == GLFW_PRESS)) {
+				modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-1.0f), glm::vec3(0, 1, 0));
+			}
+			else {
+				modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(1.0f), glm::vec3(0, 1, 0));
+			}
+			rotWheelsX -= 0.05;
+			rotWheelsY -= 0.02;
+			if (rotWheelsY < -0.44f)
+				rotWheelsY = -0.44f;
+		}if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || botones[0] == GLFW_PRESS)) {
+			modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 0.22));
+			if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+				&& abs(axes[0]) < 0.02f) {
+				if (rotWheelsY < 0.0f)
+					rotWheelsY += 0.02;
+				if (rotWheelsY > 0.0f)
+					rotWheelsY -= 0.02;
+
+			}
+			//reproduce sonido
+			if (sourcesPlay[4] && iniciaPartida) {
+				sourcesPlay[4] = false;
+				sourcesPlay[5] = true;
+				alSourceStop(source[5]);
+				alSourcePlay(source[4]);
+			}
+		}
+
 		else {
-			modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-1.0f), glm::vec3(0, 1, 0));
-		}
-		rotWheelsX += 0.05;
-		rotWheelsY += 0.02;
-		if (rotWheelsY > 0.44f)
-			rotWheelsY = 0.44f;
+			if (!sourcesPlay[4]) {
+				sourcesPlay[4] = true;
+				alSourceStop(source[4]);
 
-	}
-	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS || axes[0] > 0.2f)) {
-		if (!(modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) || botones[2] == GLFW_PRESS)) {
-			modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-1.0f), glm::vec3(0, 1, 0));
+			}
+			if (sourcesPlay[5] && iniciaPartida) {
+				alSourcePlay(source[5]);
+				sourcesPlay[5] = false;
+			}
 		}
-		else {
-			modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(1.0f), glm::vec3(0, 1, 0));
-		}
-		rotWheelsX -= 0.05;
-		rotWheelsY -= 0.02;
-		if (rotWheelsY < -0.44f)
-			rotWheelsY = -0.44f;
-	}if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || botones[0] == GLFW_PRESS)) {
-		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 0.22));
-		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-			&& abs(axes[0]) < 0.02f) {
-			if (rotWheelsY < 0.0f)
-				rotWheelsY += 0.02;
-			if (rotWheelsY > 0.0f)
-				rotWheelsY -= 0.02;
 
+		if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || botones[2] == GLFW_PRESS)) {
+			modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, -0.11));
+			if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
+				&& !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+				&& abs(axes[0]) < 0.02f) {
+				if (rotWheelsY < 0.0f)
+					rotWheelsY += 0.02;
+				if (rotWheelsY > 0.0f)
+					rotWheelsY -= 0.02;
+			}
 		}
-		//reproduce sonido
-		if (sourcesPlay[4] && iniciaPartida) {
-			sourcesPlay[4] = false;
-			sourcesPlay[5] = true;
-			alSourceStop(source[5]);
-			alSourcePlay(source[4]);
+
+		if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS || botones[1] == GLFW_PRESS) &&
+			(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || botones[0] == GLFW_PRESS)) {
+			modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 2.22));
+			if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+				&& abs(axes[0]) < 0.02f) {
+				if (rotWheelsY < 0.0f)
+					rotWheelsY += 0.6;
+				if (rotWheelsY > 0.0f)
+					rotWheelsY -= 0.6;
+
+			}
 		}
-	}
 
-	else {
-		if (!sourcesPlay[4]) {
-			sourcesPlay[4] = true;
-			alSourceStop(source[4]);
-
+		bool keySpaceStatus = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
+		if (!isJump && keySpaceStatus) {
+			isJump = true;
+			startTimeJump = currTime;
+			tmv = 0;
 		}
-		if (sourcesPlay[5] && iniciaPartida) {
-			alSourcePlay(source[5]);
-			sourcesPlay[5] = false;
-		}
-	}
-
-	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS || botones[2] == GLFW_PRESS)) {
-		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, -0.11));
-		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
-			&& !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-			&& abs(axes[0]) < 0.02f) {
-			if (rotWheelsY < 0.0f)
-				rotWheelsY += 0.02;
-			if (rotWheelsY > 0.0f)
-				rotWheelsY -= 0.02;
-		}
-	}
-
-	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS || botones[1] == GLFW_PRESS) &&
-		(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS || botones[0] == GLFW_PRESS)) {
-		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 2.22));
-		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
-			&& abs(axes[0]) < 0.02f) {
-			if (rotWheelsY < 0.0f)
-				rotWheelsY += 0.6;
-			if (rotWheelsY > 0.0f)
-				rotWheelsY -= 0.6;
-
-		}
-	}
-
-	bool keySpaceStatus = glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS;
-	if(!isJump && keySpaceStatus){
-		isJump = true;
-		startTimeJump = currTime;
-		tmv = 0;
 	}
 
 	glfwPollEvents();
