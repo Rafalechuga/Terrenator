@@ -103,13 +103,7 @@ Model modelRock;
 Model modelAircraft;
 Model modelHeliChasis;
 Model modelHeliHeli;
-Model modelLambo;
-Model modelLamboLeftDor;
-Model modelLamboRightDor;
-Model modelLamboFrontLeftWheel;
-Model modelLamboFrontRightWheel;
-Model modelLamboRearLeftWheel;
-Model modelLamboRearRightWheel;
+
 
 // Terrenator
 Model modelTerrenator;
@@ -198,7 +192,6 @@ int lastMousePosY, offsetY = 0;
 // Model matrix definitions
 glm::mat4 matrixModelRock = glm::mat4(1.0);
 glm::mat4 modelMatrixHeli = glm::mat4(1.0f);
-glm::mat4 modelMatrixLambo = glm::mat4(1.0);
 glm::mat4 modelMatrixAircraft = glm::mat4(1.0);
 glm::mat4 modelMatrixDart = glm::mat4(1.0f);
 glm::mat4 modelMatrixMayow = glm::mat4(1.0f);
@@ -242,10 +235,6 @@ int numPasosDart = 0;
 
 // Var animate helicopter
 float rotHelHelY = 0.0;
-
-// Var animate lambo dor
-int stateDoor = 0;
-float dorRotCount = 0.0;
 
 //vidas
 int vidas = 3;
@@ -441,7 +430,6 @@ std::vector<float> guardrailOrientation1 = {
 // Blending model unsorted
 std::map<std::string, glm::vec3> blendingUnsorted = {
 		{"aircraft", glm::vec3(10.0, 0.0, -17.5)},
-		{"lambo", glm::vec3(23.0, 0.0, 0.0)},
 		{"heli", glm::vec3(5.0, 10.0, -5.0)},
 		{"fountain", glm::vec3(5.0, 0.0, -40.0)},
 		{"fire", glm::vec3(0.0, 0.0, 7.0)},
@@ -807,21 +795,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	//modelHeliChasis.setShader(&shaderMulLighting);
 	//modelHeliHeli.loadModel("../models/Helicopter/Mi_24_heli.obj");
 	//modelHeliHeli.setShader(&shaderMulLighting);
-	//// Lamborginhi
-	//modelLambo.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_chasis.obj");
-	//modelLambo.setShader(&shaderMulLighting);
-	//modelLamboLeftDor.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_left_dor.obj");
-	//modelLamboLeftDor.setShader(&shaderMulLighting);
-	//modelLamboRightDor.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_right_dor.obj");
-	//modelLamboRightDor.setShader(&shaderMulLighting);
-	//modelLamboFrontLeftWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_front_left_wheel.obj");
-	//modelLamboFrontLeftWheel.setShader(&shaderMulLighting);
-	//modelLamboFrontRightWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_front_right_wheel.obj");
-	//modelLamboFrontRightWheel.setShader(&shaderMulLighting);
-	//modelLamboRearLeftWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_rear_left_wheel.obj");
-	//modelLamboRearLeftWheel.setShader(&shaderMulLighting);
-	//modelLamboRearRightWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_rear_right_wheel.obj");
-	//modelLamboRearRightWheel.setShader(&shaderMulLighting);
+
 
 	// Terrenator
 	modelTerrenator.loadModel("../models/Terrenator/Terrenator_chasis.obj");
@@ -1696,13 +1670,6 @@ void destroy() {
 	modelDartLegoRightLeg.destroy();
 	modelHeliChasis.destroy();
 	modelHeliHeli.destroy();
-	modelLambo.destroy();
-	modelLamboFrontLeftWheel.destroy();
-	modelLamboFrontRightWheel.destroy();
-	modelLamboLeftDor.destroy();
-	modelLamboRearLeftWheel.destroy();
-	modelLamboRearRightWheel.destroy();
-	modelLamboRightDor.destroy();
 	modelRock.destroy();
 	modelLamp1.destroy();
 	modelLamp2.destroy();
@@ -2104,9 +2071,6 @@ void applicationLoop() {
 	modelMatrixHeli = glm::translate(modelMatrixHeli, glm::vec3(5.0, 10.0, -5.0));
 
 	modelMatrixAircraft = glm::translate(modelMatrixAircraft, glm::vec3(10.0, 2.0, -17.5));
-
-	modelMatrixLambo = glm::translate(modelMatrixLambo, glm::vec3(23.0, 0.0, 0.0));
-
 	
 	modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-90.0f), glm::vec3(0, 1, 0));
 	modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(20.0f, 2.0f, -10.0f));
@@ -3087,21 +3051,6 @@ void applicationLoop() {
 		 * State machines
 		 *******************************************/
 
-		// State machine for the lambo car
-		switch(stateDoor){
-		case 0:
-			dorRotCount += 0.5;
-			if(dorRotCount > 75)
-				stateDoor = 1;
-			break;
-		case 1:
-			dorRotCount -= 0.5;
-			if(dorRotCount < 0){
-				dorRotCount = 0.0;
-				stateDoor = 0;
-			}
-			break;
-		}
 
 		glEnable(GL_BLEND);
 		switch (vidas) {
@@ -3210,14 +3159,6 @@ void prepareScene(){
 	// Helicopter
 	modelHeliChasis.setShader(&shaderMulLighting);
 	modelHeliHeli.setShader(&shaderMulLighting);
-	// Lamborginhi
-	modelLambo.setShader(&shaderMulLighting);
-	modelLamboLeftDor.setShader(&shaderMulLighting);
-	modelLamboRightDor.setShader(&shaderMulLighting);
-	modelLamboFrontLeftWheel.setShader(&shaderMulLighting);
-	modelLamboFrontRightWheel.setShader(&shaderMulLighting);
-	modelLamboRearLeftWheel.setShader(&shaderMulLighting);
-	modelLamboRearRightWheel.setShader(&shaderMulLighting);
 
 	// Terrenator
 	modelTerrenator.setShader(&shaderMulLighting);
@@ -3273,14 +3214,6 @@ void prepareDepthScene(){
 	// Helicopter
 	modelHeliChasis.setShader(&shaderDepth);
 	modelHeliHeli.setShader(&shaderDepth);
-	// Lamborginhi
-	modelLambo.setShader(&shaderDepth);
-	modelLamboLeftDor.setShader(&shaderDepth);
-	modelLamboRightDor.setShader(&shaderDepth);
-	modelLamboFrontLeftWheel.setShader(&shaderDepth);
-	modelLamboFrontRightWheel.setShader(&shaderDepth);
-	modelLamboRearLeftWheel.setShader(&shaderDepth);
-	modelLamboRearRightWheel.setShader(&shaderDepth);
 
 	// Terrenator
 	modelTerrenator.setShader(&shaderDepth);
@@ -3729,8 +3662,6 @@ void renderScene(bool renderParticles){
 	 */
 	// Update the aircraft
 	blendingUnsorted.find("aircraft")->second = glm::vec3(modelMatrixAircraft[3]);
-	// Update the lambo
-	blendingUnsorted.find("lambo")->second = glm::vec3(modelMatrixLambo[3]);
 	// Update the Terrenator
 	//blendingUnsorted.find("Terrenator")->second = glm::vec3(modelMatrixTerrenator[3]);
 	// Update the helicopter
@@ -3758,25 +3689,6 @@ void renderScene(bool renderParticles){
 			glm::mat4 modelMatrixAircraftBlend = glm::mat4(modelMatrixAircraft);
 			modelMatrixAircraftBlend[3][1] = terrain.getHeightTerrain(modelMatrixAircraftBlend[3][0], modelMatrixAircraftBlend[3][2]) + 2.0;
 			modelAircraft.render(modelMatrixAircraftBlend);
-		}
-		else if(it->second.first.compare("lambo") == 0){
-			// Lambo car
-			glm::mat4 modelMatrixLamboBlend = glm::mat4(modelMatrixLambo);
-			modelMatrixLamboBlend[3][1] = terrain.getHeightTerrain(modelMatrixLamboBlend[3][0], modelMatrixLamboBlend[3][2]);
-			modelMatrixLamboBlend = glm::scale(modelMatrixLamboBlend, glm::vec3(1.3, 1.3, 1.3));
-			modelLambo.render(modelMatrixLamboBlend);
-			glActiveTexture(GL_TEXTURE0);
-			glm::mat4 modelMatrixLamboLeftDor = glm::mat4(modelMatrixLamboBlend);
-			modelMatrixLamboLeftDor = glm::translate(modelMatrixLamboLeftDor, glm::vec3(1.08676, 0.707316, 0.982601));
-			modelMatrixLamboLeftDor = glm::rotate(modelMatrixLamboLeftDor, glm::radians(dorRotCount), glm::vec3(1.0, 0, 0));
-			modelMatrixLamboLeftDor = glm::translate(modelMatrixLamboLeftDor, glm::vec3(-1.08676, -0.707316, -0.982601));
-			modelLamboLeftDor.render(modelMatrixLamboLeftDor);
-			modelLamboRightDor.render(modelMatrixLamboBlend);
-			modelLamboFrontLeftWheel.render(modelMatrixLamboBlend);
-			modelLamboFrontRightWheel.render(modelMatrixLamboBlend);
-			modelLamboRearLeftWheel.render(modelMatrixLamboBlend);
-			modelLamboRearRightWheel.render(modelMatrixLamboBlend);
-			// Se regresa el cull faces IMPORTANTE para las puertas
 		}
 		else if(it->second.first.compare("heli") == 0){
 			// Helicopter
