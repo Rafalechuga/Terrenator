@@ -35,9 +35,9 @@ vec3 randomInitialVelocity() {
 }
 
 vec3 randomInitialPosition() {
-    float offsetx = mix(-5.0, 10.0, texelFetch(RandomTex, 2 * gl_VertexID, 0).r);
+    float offsetx = mix(-5.0, 20.0, texelFetch(RandomTex, 2 * gl_VertexID, 0).r);
     float offsetz = mix(-5.0, 5.0, texelFetch(RandomTex, 2 * gl_VertexID + 1, 0).r);
-    return Emitter + vec3(offsetx, -5.0, offsetz);
+    return Emitter + vec3(offsetx, 0.0, offsetz);
 }
 
 // Offsets to the position in camera coordinates for each vertex of the particle's quad

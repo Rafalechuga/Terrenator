@@ -473,7 +473,7 @@ GLuint posBuf[2], velBuf[2], age[2];
 GLuint particleArray[2];
 GLuint feedback[2];
 GLuint drawBuf = 1;
-float particleSize = 0.035, particleLifetime = 3.0;
+float particleSize = 0.08, particleLifetime = 3.0;
 double currTimeParticlesAnimationFire, lastTimeParticlesAnimationFire;
 
 // Colliders
@@ -792,36 +792,36 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	boxLightViewBox.init();
 	boxLightViewBox.setShader(&shaderViewDepth);
 
-	modelRock.loadModel("../models/rock/rock.obj");
-	modelRock.setShader(&shaderMulLighting);
+	/*modelRock.loadModel("../models/rock/rock.obj");
+	modelRock.setShader(&shaderMulLighting);*/
 
-	modelAircraft.loadModel("../models/Aircraft_obj/E 45 Aircraft_obj.obj");
-	modelAircraft.setShader(&shaderMulLighting);
+	/*modelAircraft.loadModel("../models/Aircraft_obj/E 45 Aircraft_obj.obj");
+	modelAircraft.setShader(&shaderMulLighting);*/
 
 	terrain.init();
 	terrain.setShader(&shaderTerrain);
 	terrain.setPosition(glm::vec3(100, 0, 100));
 
-	// Helicopter
-	modelHeliChasis.loadModel("../models/Helicopter/Mi_24_chasis.obj");
-	modelHeliChasis.setShader(&shaderMulLighting);
-	modelHeliHeli.loadModel("../models/Helicopter/Mi_24_heli.obj");
-	modelHeliHeli.setShader(&shaderMulLighting);
-	// Lamborginhi
-	modelLambo.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_chasis.obj");
-	modelLambo.setShader(&shaderMulLighting);
-	modelLamboLeftDor.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_left_dor.obj");
-	modelLamboLeftDor.setShader(&shaderMulLighting);
-	modelLamboRightDor.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_right_dor.obj");
-	modelLamboRightDor.setShader(&shaderMulLighting);
-	modelLamboFrontLeftWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_front_left_wheel.obj");
-	modelLamboFrontLeftWheel.setShader(&shaderMulLighting);
-	modelLamboFrontRightWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_front_right_wheel.obj");
-	modelLamboFrontRightWheel.setShader(&shaderMulLighting);
-	modelLamboRearLeftWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_rear_left_wheel.obj");
-	modelLamboRearLeftWheel.setShader(&shaderMulLighting);
-	modelLamboRearRightWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_rear_right_wheel.obj");
-	modelLamboRearRightWheel.setShader(&shaderMulLighting);
+	//// Helicopter
+	//modelHeliChasis.loadModel("../models/Helicopter/Mi_24_chasis.obj");
+	//modelHeliChasis.setShader(&shaderMulLighting);
+	//modelHeliHeli.loadModel("../models/Helicopter/Mi_24_heli.obj");
+	//modelHeliHeli.setShader(&shaderMulLighting);
+	//// Lamborginhi
+	//modelLambo.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_chasis.obj");
+	//modelLambo.setShader(&shaderMulLighting);
+	//modelLamboLeftDor.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_left_dor.obj");
+	//modelLamboLeftDor.setShader(&shaderMulLighting);
+	//modelLamboRightDor.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_right_dor.obj");
+	//modelLamboRightDor.setShader(&shaderMulLighting);
+	//modelLamboFrontLeftWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_front_left_wheel.obj");
+	//modelLamboFrontLeftWheel.setShader(&shaderMulLighting);
+	//modelLamboFrontRightWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_front_right_wheel.obj");
+	//modelLamboFrontRightWheel.setShader(&shaderMulLighting);
+	//modelLamboRearLeftWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_rear_left_wheel.obj");
+	//modelLamboRearLeftWheel.setShader(&shaderMulLighting);
+	//modelLamboRearRightWheel.loadModel("../models/Lamborginhi_Aventador_OBJ/Lamborghini_Aventador_rear_right_wheel.obj");
+	//modelLamboRearRightWheel.setShader(&shaderMulLighting);
 
 	// Terrenator
 	modelTerrenator.loadModel("../models/Terrenator/Terrenator_chasis.obj");
@@ -843,33 +843,34 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelMeta.loadModel("../models/finish_line/finish_line.fbx");
 	modelMeta.setShader(&shaderMulLighting);
 
-	// Dart Lego
-	modelDartLegoBody.loadModel("../models/LegoDart/LeoDart_body.obj");
-	modelDartLegoBody.setShader(&shaderMulLighting);
-	modelDartLegoMask.loadModel("../models/LegoDart/LeoDart_mask.obj");
-	modelDartLegoMask.setShader(&shaderMulLighting);
-	modelDartLegoHead.loadModel("../models/LegoDart/LeoDart_head.obj");
-	modelDartLegoHead.setShader(&shaderMulLighting);
-	modelDartLegoLeftArm.loadModel("../models/LegoDart/LeoDart_left_arm.obj");
-	modelDartLegoLeftArm.setShader(&shaderMulLighting);
-	modelDartLegoRightArm.loadModel("../models/LegoDart/LeoDart_right_arm.obj");
-	modelDartLegoRightArm.setShader(&shaderMulLighting);
-	modelDartLegoLeftHand.loadModel("../models/LegoDart/LeoDart_left_hand.obj");
-	modelDartLegoLeftHand.setShader(&shaderMulLighting);
-	modelDartLegoRightHand.loadModel("../models/LegoDart/LeoDart_right_hand.obj");
-	modelDartLegoRightHand.setShader(&shaderMulLighting);
-	modelDartLegoLeftLeg.loadModel("../models/LegoDart/LeoDart_left_leg.obj");
-	modelDartLegoLeftLeg.setShader(&shaderMulLighting);
-	modelDartLegoRightLeg.loadModel("../models/LegoDart/LeoDart_right_leg.obj");
-	modelDartLegoRightLeg.setShader(&shaderMulLighting);
+	//// Dart Lego
+	//modelDartLegoBody.loadModel("../models/LegoDart/LeoDart_body.obj");
+	//modelDartLegoBody.setShader(&shaderMulLighting);
+	//modelDartLegoMask.loadModel("../models/LegoDart/LeoDart_mask.obj");
+	//modelDartLegoMask.setShader(&shaderMulLighting);
+	//modelDartLegoHead.loadModel("../models/LegoDart/LeoDart_head.obj");
+	//modelDartLegoHead.setShader(&shaderMulLighting);
+	//modelDartLegoLeftArm.loadModel("../models/LegoDart/LeoDart_left_arm.obj");
+	//modelDartLegoLeftArm.setShader(&shaderMulLighting);
+	//modelDartLegoRightArm.loadModel("../models/LegoDart/LeoDart_right_arm.obj");
+	//modelDartLegoRightArm.setShader(&shaderMulLighting);
+	//modelDartLegoLeftHand.loadModel("../models/LegoDart/LeoDart_left_hand.obj");
+	//modelDartLegoLeftHand.setShader(&shaderMulLighting);
+	//modelDartLegoRightHand.loadModel("../models/LegoDart/LeoDart_right_hand.obj");
+	//modelDartLegoRightHand.setShader(&shaderMulLighting);
+	//modelDartLegoLeftLeg.loadModel("../models/LegoDart/LeoDart_left_leg.obj");
+	//modelDartLegoLeftLeg.setShader(&shaderMulLighting);
+	//modelDartLegoRightLeg.loadModel("../models/LegoDart/LeoDart_right_leg.obj");
+	//modelDartLegoRightLeg.setShader(&shaderMulLighting);
 
-	//Lamp models
-	modelLamp1.loadModel("../models/Street-Lamp-Black/objLamp.obj");
-	modelLamp1.setShader(&shaderMulLighting);
-	modelLamp2.loadModel("../models/Street_Light/Lamp.obj");
-	modelLamp2.setShader(&shaderMulLighting);
-	modelLampPost2.loadModel("../models/Street_Light/LampPost.obj");
-	modelLampPost2.setShader(&shaderMulLighting);
+
+	////Lamp models
+	//modelLamp1.loadModel("../models/Street-Lamp-Black/objLamp.obj");
+	//modelLamp1.setShader(&shaderMulLighting);
+	//modelLamp2.loadModel("../models/Street_Light/Lamp.obj");
+	//modelLamp2.setShader(&shaderMulLighting);
+	//modelLampPost2.loadModel("../models/Street_Light/LampPost.obj");
+	//modelLampPost2.setShader(&shaderMulLighting);
 
 	//Guardrail model
 	modelGuardrail0.loadModel("../models/guardrail/Guardrail.obj");
@@ -883,13 +884,13 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelGrass.loadModel("../models/grass/grassModel.obj");
 	modelGrass.setShader(&shaderMulLighting);
 
-	//Fountain
-	modelFountain.loadModel("../models/fountain/fountain.obj");
-	modelFountain.setShader(&shaderMulLighting);
+	////Fountain
+	//modelFountain.loadModel("../models/fountain/fountain.obj");
+	//modelFountain.setShader(&shaderMulLighting);
 
-	//Mayow
-	mayowModelAnimate.loadModel("../models/mayow/personaje2.fbx");
-	mayowModelAnimate.setShader(&shaderMulLighting);
+	////Mayow
+	//mayowModelAnimate.loadModel("../models/mayow/personaje2.fbx");
+	//mayowModelAnimate.setShader(&shaderMulLighting);
 
 	//Barrel
 	modelBarrel.loadModel("../models/Barrel/barrel.fbx");
@@ -903,13 +904,13 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	modelRock2.loadModel("../models/rock/rock2/CavePlatform1_Fbx.fbx");
 	modelRock2.setShader(&shaderMulLighting);
 
-	//Victory
+	//////Victory
 	victoryModelAnimate.loadModel("../models/victory/Victory Idle.dae");
 	victoryModelAnimate.setShader(&shaderMulLighting);
-	victoryModelAnimate2.loadModel("../models/victory/Victory.dae");
-	victoryModelAnimate2.setShader(&shaderMulLighting);
-	victoryModelAnimate3.loadModel("../models/victory/Victory Idle2.dae");
-	victoryModelAnimate3.setShader(&shaderMulLighting);
+	////victoryModelAnimate2.loadModel("../models/victory/Victory.dae");
+	////victoryModelAnimate2.setShader(&shaderMulLighting);
+	////victoryModelAnimate3.loadModel("../models/victory/Victory Idle2.dae");
+	////victoryModelAnimate3.setShader(&shaderMulLighting);
 
 	camera->setPosition(glm::vec3(0.0, 0.0, 10.0));
 	camera->setDistanceFromTarget(distanceFromTarget);
@@ -1433,7 +1434,7 @@ void init(int width, int height, std::string strTitle, bool bFullScreen) {
 	// Libera la memoria de la textura
 	textureTerrainBlendMap.freeImage(bitmap);
 
-	Texture textureParticlesFountain("../Textures/bluewater.png");
+	Texture textureParticlesFountain("../Textures/nieve3.png");
 	bitmap = textureParticlesFountain.loadImage();
 	data = textureParticlesFountain.convertToData(bitmap, imageWidth, imageHeight);
 	glGenTextures(1, &textureParticleFountainID);
@@ -1974,6 +1975,7 @@ bool processInput(bool continueApplication) {
 			alSourcePlay(source[4]);
 		}
 	}
+
 	else {
 		if (!sourcesPlay[4]) {
 			sourcesPlay[4] = true;
@@ -1985,6 +1987,7 @@ bool processInput(bool continueApplication) {
 			sourcesPlay[5] = false;
 		}
 	}
+
 	if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
 		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, -0.11));
 		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
@@ -1995,6 +1998,20 @@ bool processInput(bool continueApplication) {
 				rotWheelsY -= 0.02;
 		}
 	}
+
+	if (modelSelected == 1 && (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS || botones[0] == GLFW_PRESS) &&
+		glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+		modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(0, 0, 2.22));
+		if (!(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) && !(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
+			&& abs(axes[0]) < 0.02f) {
+			if (rotWheelsY < 0.0f)
+				rotWheelsY += 0.6;
+			if (rotWheelsY > 0.0f)
+				rotWheelsY -= 0.6;
+
+		}
+	}
+	
 
 	// Dart Lego model movements
 	/*if (modelSelected == 1 && glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_RELEASE &&
@@ -2505,33 +2522,112 @@ void applicationLoop() {
 		aircraftCollider.e = modelAircraft.getObb().e * glm::vec3(1.0, 1.0, 1.0);
 		addOrUpdateColliders(collidersOBB, "aircraft", aircraftCollider, modelMatrixAircraft);
 
-		//Collider de barril
+		//Collider de barril 1
 		glm::mat4 modelmatrixColliderBarrel = glm::mat4(modelMatrixBarrel);
 		AbstractModel::OBB BarrelCollider;
 		// Set the orientation of collider before doing the scale
 		BarrelCollider.u = glm::quat_cast(modelMatrixBarrel);
 		modelmatrixColliderBarrel = glm::scale(modelmatrixColliderBarrel,
-			glm::vec3(2.0, 2.0, 5.0));
+			glm::vec3(1.0, 1.0, 1.0));
 		modelmatrixColliderBarrel = glm::translate(							
-			modelmatrixColliderBarrel, glm::vec3(0.0, 1.0, 0.08));
+			modelmatrixColliderBarrel, glm::vec3(modelDartLegoBody.getObb().c.x - 13.67,
+				modelDartLegoBody.getObb().c.y + 2.3,
+				modelDartLegoBody.getObb().c.z+23.04));
 		BarrelCollider.c = glm::vec3(modelmatrixColliderBarrel[3]);
 		BarrelCollider.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
 		addOrUpdateColliders(collidersOBB, "barrel", BarrelCollider, modelMatrixBarrel);
 
-		//Collider de llanta
-		glm::mat4 modelmatrixColliderWheels = glm::mat4(modelMatrixThreeWheels);
-		AbstractModel::OBB WheelsCollider;
+		//Collider de barril 2
+		glm::mat4 modelmatrixColliderBarrel2 = glm::mat4(modelMatrixBarrel);
+		AbstractModel::OBB BarrelCollider2;
 		// Set the orientation of collider before doing the scale
-		WheelsCollider.u = glm::quat_cast(modelMatrixThreeWheels);
-		modelmatrixColliderWheels = glm::scale(modelmatrixColliderWheels,
+		BarrelCollider2.u = glm::quat_cast(modelMatrixBarrel);
+		modelmatrixColliderBarrel2 = glm::scale(modelmatrixColliderBarrel2,
 			glm::vec3(1.0, 1.0, 1.0));
-		modelmatrixColliderWheels = glm::translate(
-			modelmatrixColliderWheels, glm::vec3(4.5, 2.0, -3.0));
-		WheelsCollider.c = glm::vec3(modelmatrixColliderWheels[3]);
-		WheelsCollider.e = modelThreeWheels.getObb().e * glm::vec3(0.09, 0.03, 0.07);
-		addOrUpdateColliders(collidersOBB, "wheels", WheelsCollider, modelMatrixThreeWheels);
+		modelmatrixColliderBarrel2 = glm::translate(
+			modelmatrixColliderBarrel2, glm::vec3(modelDartLegoBody.getObb().c.x - 19.14,
+				modelDartLegoBody.getObb().c.y + 2.3,
+				modelDartLegoBody.getObb().c.z -19.14));
+		BarrelCollider2.c = glm::vec3(modelmatrixColliderBarrel2[3]);
+		BarrelCollider2.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
+		addOrUpdateColliders(collidersOBB, "barrel2", BarrelCollider2, modelMatrixBarrel);
 
-		//Collider de rock2
+		//Collider de barril 3
+		glm::mat4 modelmatrixColliderBarrel3 = glm::mat4(modelMatrixBarrel);
+		AbstractModel::OBB BarrelCollider3;
+		// Set the orientation of collider before doing the scale
+		BarrelCollider3.u = glm::quat_cast(modelMatrixBarrel);
+		modelmatrixColliderBarrel3 = glm::scale(modelmatrixColliderBarrel3,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderBarrel3 = glm::translate(
+			modelmatrixColliderBarrel3, glm::vec3(modelDartLegoBody.getObb().c.x + 54.68,
+				modelDartLegoBody.getObb().c.y + 2.3,
+				modelDartLegoBody.getObb().c.z - 17.57));
+		BarrelCollider3.c = glm::vec3(modelmatrixColliderBarrel3[3]);
+		BarrelCollider3.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
+		addOrUpdateColliders(collidersOBB, "barrel3", BarrelCollider3, modelMatrixBarrel);
+
+		//Collider de barril 4
+		glm::mat4 modelmatrixColliderBarrel4 = glm::mat4(modelMatrixBarrel);
+		AbstractModel::OBB BarrelCollider4;
+		// Set the orientation of collider before doing the scale
+		BarrelCollider4.u = glm::quat_cast(modelMatrixBarrel);
+		modelmatrixColliderBarrel4 = glm::scale(modelmatrixColliderBarrel4,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderBarrel4 = glm::translate(
+			modelmatrixColliderBarrel4, glm::vec3(modelDartLegoBody.getObb().c.x - 3.125,
+				modelDartLegoBody.getObb().c.y + 2.3,
+				modelDartLegoBody.getObb().c.z - 64.45));
+		BarrelCollider4.c = glm::vec3(modelmatrixColliderBarrel4[3]);
+		BarrelCollider4.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
+		addOrUpdateColliders(collidersOBB, "barrel4", BarrelCollider4, modelMatrixBarrel);
+
+		//Collider de barril 5
+		glm::mat4 modelmatrixColliderBarrel5 = glm::mat4(modelMatrixBarrel);
+		AbstractModel::OBB BarrelCollider5;
+		// Set the orientation of collider before doing the scale
+		BarrelCollider5.u = glm::quat_cast(modelMatrixBarrel);
+		modelmatrixColliderBarrel5 = glm::scale(modelmatrixColliderBarrel5,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderBarrel5 = glm::translate(
+			modelmatrixColliderBarrel5, glm::vec3(modelDartLegoBody.getObb().c.x - 59.76,
+				modelDartLegoBody.getObb().c.y + 2.3,
+				modelDartLegoBody.getObb().c.z + 57.42));
+		BarrelCollider5.c = glm::vec3(modelmatrixColliderBarrel5[3]);
+		BarrelCollider5.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
+		addOrUpdateColliders(collidersOBB, "barrel5", BarrelCollider5, modelMatrixBarrel);
+
+		//Collider de barril 6
+		glm::mat4 modelmatrixColliderBarrel6 = glm::mat4(modelMatrixBarrel);
+		AbstractModel::OBB BarrelCollider6;
+		// Set the orientation of collider before doing the scale
+		BarrelCollider6.u = glm::quat_cast(modelMatrixBarrel);
+		modelmatrixColliderBarrel6 = glm::scale(modelmatrixColliderBarrel6,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderBarrel6 = glm::translate(
+			modelmatrixColliderBarrel6, glm::vec3(modelDartLegoBody.getObb().c.x + 54.68,
+				modelDartLegoBody.getObb().c.y + 2.3,
+				modelDartLegoBody.getObb().c.z + 63.67));
+		BarrelCollider6.c = glm::vec3(modelmatrixColliderBarrel6[3]);
+		BarrelCollider6.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
+		addOrUpdateColliders(collidersOBB, "barrel6", BarrelCollider6, modelMatrixBarrel);
+
+		//Collider de barril 7
+		glm::mat4 modelmatrixColliderBarrel7 = glm::mat4(modelMatrixBarrel);
+		AbstractModel::OBB BarrelCollider7;
+		// Set the orientation of collider before doing the scale
+		BarrelCollider7.u = glm::quat_cast(modelMatrixBarrel);
+		modelmatrixColliderBarrel7 = glm::scale(modelmatrixColliderBarrel7,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderBarrel7 = glm::translate(
+			modelmatrixColliderBarrel7, glm::vec3(modelDartLegoBody.getObb().c.x + 65.23,
+				modelDartLegoBody.getObb().c.y + 2.3,
+				modelDartLegoBody.getObb().c.z + 76.17));
+		BarrelCollider7.c = glm::vec3(modelmatrixColliderBarrel7[3]);
+		BarrelCollider7.e = modelBarrel.getObb().e * glm::vec3(1.0, 1.6, 0.65);
+		addOrUpdateColliders(collidersOBB, "barrel7", BarrelCollider7, modelMatrixBarrel);
+
+		//Collider de rock2 1
 		glm::mat4 modelmatrixColliderRock2 = glm::mat4(modelMatrixRock2);
 		AbstractModel::OBB Rock2Collider;
 		// Set the orientation of collider before doing the scale
@@ -2539,10 +2635,57 @@ void applicationLoop() {
 		modelmatrixColliderRock2 = glm::scale(modelmatrixColliderRock2,
 			glm::vec3(1.0, 1.0, 1.0));
 		modelmatrixColliderRock2 = glm::translate(
-			modelmatrixColliderRock2, glm::vec3(1.023515, 1.0, 9.446066));
+			modelmatrixColliderRock2, glm::vec3(modelDartLegoBody.getObb().c.x + 0.78,
+				modelDartLegoBody.getObb().c.y+3.0,
+				modelDartLegoBody.getObb().c.z+17.57));
 		Rock2Collider.c = glm::vec3(modelmatrixColliderRock2[3]);
-		Rock2Collider.e = modelRock2.getObb().e * glm::vec3(0.07, 0.08, 0.06);
+		Rock2Collider.e = modelRock2.getObb().e * glm::vec3(0.07, 0.08, 0.08);
 		addOrUpdateColliders(collidersOBB, "rock2", Rock2Collider, modelMatrixRock2);
+
+		//Collider de rock2 2
+		glm::mat4 modelmatrixColliderRock22 = glm::mat4(modelMatrixRock2);
+		AbstractModel::OBB Rock2Collider2;
+		// Set the orientation of collider before doing the scale
+		Rock2Collider2.u = glm::quat_cast(modelMatrixRock2);
+		modelmatrixColliderRock22 = glm::scale(modelmatrixColliderRock22,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderRock22 = glm::translate(
+			modelmatrixColliderRock22, glm::vec3(modelDartLegoBody.getObb().c.x + 22.26,
+				modelDartLegoBody.getObb().c.y + 3.0,
+				modelDartLegoBody.getObb().c.z -14.45));
+		Rock2Collider2.c = glm::vec3(modelmatrixColliderRock22[3]);
+		Rock2Collider2.e = modelRock2.getObb().e * glm::vec3(0.07, 0.08, 0.08);
+		addOrUpdateColliders(collidersOBB, "rock22", Rock2Collider2, modelMatrixRock2);
+
+		//Collider de rock2 3
+		glm::mat4 modelmatrixColliderRock23 = glm::mat4(modelMatrixRock2);
+		AbstractModel::OBB Rock2Collider3;
+		// Set the orientation of collider before doing the scale
+		Rock2Collider3.u = glm::quat_cast(modelMatrixRock2);
+		modelmatrixColliderRock23 = glm::scale(modelmatrixColliderRock23,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderRock23 = glm::translate(
+			modelmatrixColliderRock23, glm::vec3(modelDartLegoBody.getObb().c.x - 64.01,
+				modelDartLegoBody.getObb().c.y + 3.0,
+				modelDartLegoBody.getObb().c.z + 17.18));
+		Rock2Collider3.c = glm::vec3(modelmatrixColliderRock23[3]);
+		Rock2Collider3.e = modelRock2.getObb().e * glm::vec3(0.07, 0.08, 0.08);
+		addOrUpdateColliders(collidersOBB, "rock23", Rock2Collider3, modelMatrixRock2);
+
+		//Collider de rock2 4
+		glm::mat4 modelmatrixColliderRock24 = glm::mat4(modelMatrixRock2);
+		AbstractModel::OBB Rock2Collider4;
+		// Set the orientation of collider before doing the scale
+		Rock2Collider4.u = glm::quat_cast(modelMatrixRock2);
+		modelmatrixColliderRock24 = glm::scale(modelmatrixColliderRock24,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderRock24 = glm::translate(
+			modelmatrixColliderRock24, glm::vec3(modelDartLegoBody.getObb().c.x + 70.43,
+				modelDartLegoBody.getObb().c.y + 3.0,
+				modelDartLegoBody.getObb().c.z + 26.95));
+		Rock2Collider4.c = glm::vec3(modelmatrixColliderRock24[3]);
+		Rock2Collider4.e = modelRock2.getObb().e * glm::vec3(0.07, 0.08, 0.08);
+		addOrUpdateColliders(collidersOBB, "rock24", Rock2Collider4, modelMatrixRock2);
 
 		//Collider del la rock
 		AbstractModel::SBB rockCollider;
@@ -2552,6 +2695,81 @@ void applicationLoop() {
 		rockCollider.c = glm::vec3(modelMatrixColliderRock[3]);
 		rockCollider.ratio = modelRock.getSbb().ratio * 1.0;
 		addOrUpdateColliders(collidersSBB, "rock", rockCollider, matrixModelRock);
+
+		//Collider de llanta 1
+		glm::mat4 modelmatrixColliderWheels = glm::mat4(modelMatrixThreeWheels);
+		AbstractModel::OBB WheelsCollider;
+		// Set the orientation of collider before doing the scale
+		WheelsCollider.u = glm::quat_cast(modelMatrixThreeWheels);
+		modelmatrixColliderWheels = glm::scale(modelmatrixColliderWheels,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderWheels = glm::translate(
+			modelmatrixColliderWheels, glm::vec3(modelDartLegoBody.getObb().c.x - 16.01,
+				modelDartLegoBody.getObb().c.y + 2.0,
+				modelDartLegoBody.getObb().c.z + 1.95));
+		WheelsCollider.c = glm::vec3(modelmatrixColliderWheels[3]);
+		WheelsCollider.e = modelThreeWheels.getObb().e * glm::vec3(0.09, 0.03, 0.07);
+		addOrUpdateColliders(collidersOBB, "wheels", WheelsCollider, modelMatrixThreeWheels);
+
+		//Collider de llanta 2
+		glm::mat4 modelmatrixColliderWheels2 = glm::mat4(modelMatrixThreeWheels);
+		AbstractModel::OBB WheelsCollider2;
+		// Set the orientation of collider before doing the scale
+		WheelsCollider2.u = glm::quat_cast(modelMatrixThreeWheels);
+		modelmatrixColliderWheels2 = glm::scale(modelmatrixColliderWheels2,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderWheels2 = glm::translate(
+			modelmatrixColliderWheels2, glm::vec3(modelDartLegoBody.getObb().c.x + 65.23,
+				modelDartLegoBody.getObb().c.y + 2.0,
+				modelDartLegoBody.getObb().c.z - 41.01));
+		WheelsCollider2.c = glm::vec3(modelmatrixColliderWheels2[3]);
+		WheelsCollider2.e = modelThreeWheels.getObb().e * glm::vec3(0.09, 0.03, 0.07);
+		addOrUpdateColliders(collidersOBB, "wheels2", WheelsCollider2, modelMatrixThreeWheels);
+
+		//Collider de llanta 3
+		glm::mat4 modelmatrixColliderWheels3 = glm::mat4(modelMatrixThreeWheels);
+		AbstractModel::OBB WheelsCollider3;
+		// Set the orientation of collider before doing the scale
+		WheelsCollider3.u = glm::quat_cast(modelMatrixThreeWheels);
+		modelmatrixColliderWheels3 = glm::scale(modelmatrixColliderWheels3,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderWheels3 = glm::translate(
+			modelmatrixColliderWheels3, glm::vec3(modelDartLegoBody.getObb().c.x - 30.46,
+				modelDartLegoBody.getObb().c.y + 3.0,
+				modelDartLegoBody.getObb().c.z - 70.11));
+		WheelsCollider3.c = glm::vec3(modelmatrixColliderWheels3[3]);
+		WheelsCollider3.e = modelThreeWheels.getObb().e * glm::vec3(0.09, 0.03, 0.07);
+		addOrUpdateColliders(collidersOBB, "wheels3", WheelsCollider3, modelMatrixThreeWheels);
+
+		//Collider de llanta 4
+		glm::mat4 modelmatrixColliderWheels4 = glm::mat4(modelMatrixThreeWheels);
+		AbstractModel::OBB WheelsCollider4;
+		// Set the orientation of collider before doing the scale
+		WheelsCollider4.u = glm::quat_cast(modelMatrixThreeWheels);
+		modelmatrixColliderWheels4 = glm::scale(modelmatrixColliderWheels4,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderWheels4 = glm::translate(
+			modelmatrixColliderWheels4, glm::vec3(modelDartLegoBody.getObb().c.x - 60.54,
+				modelDartLegoBody.getObb().c.y + 2.0,
+				modelDartLegoBody.getObb().c.z - 28.90));
+		WheelsCollider4.c = glm::vec3(modelmatrixColliderWheels4[3]);
+		WheelsCollider4.e = modelThreeWheels.getObb().e * glm::vec3(0.09, 0.03, 0.07);
+		addOrUpdateColliders(collidersOBB, "wheels4", WheelsCollider4, modelMatrixThreeWheels);
+
+		//Collider de llanta 5
+		glm::mat4 modelmatrixColliderWheels5 = glm::mat4(modelMatrixThreeWheels);
+		AbstractModel::OBB WheelsCollider5;
+		// Set the orientation of collider before doing the scale
+		WheelsCollider5.u = glm::quat_cast(modelMatrixThreeWheels);
+		modelmatrixColliderWheels5 = glm::scale(modelmatrixColliderWheels5,
+			glm::vec3(1.0, 1.0, 1.0));
+		modelmatrixColliderWheels5 = glm::translate(
+			modelmatrixColliderWheels5, glm::vec3(modelDartLegoBody.getObb().c.x + 2.43,
+				modelDartLegoBody.getObb().c.y + 2.5,
+				modelDartLegoBody.getObb().c.z + 67.57));
+		WheelsCollider5.c = glm::vec3(modelmatrixColliderWheels5[3]);
+		WheelsCollider5.e = modelThreeWheels.getObb().e * glm::vec3(0.09, 0.03, 0.07);
+		addOrUpdateColliders(collidersOBB, "wheels5", WheelsCollider5, modelMatrixThreeWheels);
 
 		// Lamps1 colliders
 		for (int i = 0; i < lamp1Position.size(); i++){
@@ -3190,10 +3408,10 @@ void renderScene(bool renderParticles){
 	modelGrass.render();
 	glEnable(GL_CULL_FACE);
 
-	// Fountain
-	glDisable(GL_CULL_FACE);
-	modelFountain.render(modelMatrixFountain);
-	glEnable(GL_CULL_FACE);
+	//// Fountain
+	//glDisable(GL_CULL_FACE);
+	//modelFountain.render(modelMatrixFountain);
+	//glEnable(GL_CULL_FACE);
 
 
 	// Terrenator
@@ -3247,106 +3465,247 @@ void renderScene(bool renderParticles){
 	modelMeta.render(modelMatrixMetaBody);
 	glEnable(GL_CULL_FACE);
 
-	//Barrel
+	//Barrel 1
 	glDisable(GL_CULL_FACE);
 	glm::mat4 modelBarril = glm::mat4(modelMatrixBarrel);
-	modelBarril = translate(modelBarril, glm::vec3(-0.023515, 1.0, 0.446066));
+	modelBarril = translate(modelBarril, glm::vec3(-13.67, 1.3, 23.04));
 	modelBarril = glm::rotate(modelBarril, glm::radians(-90.0f), glm::vec3(1, 0, 0));
 	modelBarril = glm::scale(modelBarril, glm::vec3(1.0f, 1.0f, 1.0f));
 	modelBarrel.render(modelBarril);
 	glEnable(GL_CULL_FACE);
 
-	//ThreeWheels
+	//Barrel 2
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelBarril2 = glm::mat4(modelMatrixBarrel);
+	modelBarril2 = translate(modelBarril2, glm::vec3(-19.14, 1.3, -19.14));
+	modelBarril2 = glm::rotate(modelBarril2, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	modelBarril2 = glm::scale(modelBarril2, glm::vec3(1.0f, 1.0f, 1.0f));
+	modelBarrel.render(modelBarril2);
+	glEnable(GL_CULL_FACE);
+
+	//Barrel 3
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelBarril3 = glm::mat4(modelMatrixBarrel);
+	modelBarril3 = translate(modelBarril3, glm::vec3(54.68, 1.3, -17.57));
+	modelBarril3 = glm::rotate(modelBarril3, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	modelBarril3 = glm::scale(modelBarril3, glm::vec3(1.0f, 1.0f, 1.0f));
+	modelBarrel.render(modelBarril3);
+	glEnable(GL_CULL_FACE);
+
+	//Barrel 4
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelBarril4 = glm::mat4(modelMatrixBarrel);
+	modelBarril4 = translate(modelBarril4, glm::vec3(-3.125, 1.3, -64.45));
+	modelBarril4 = glm::rotate(modelBarril4, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	modelBarril4 = glm::scale(modelBarril4, glm::vec3(1.0f, 1.0f, 1.0f));
+	modelBarrel.render(modelBarril4);
+	glEnable(GL_CULL_FACE);
+
+	//Barrel 5
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelBarril5 = glm::mat4(modelMatrixBarrel);
+	modelBarril5 = translate(modelBarril5, glm::vec3(-59.76, 1.3, 57.42));
+	modelBarril5 = glm::rotate(modelBarril5, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	modelBarril5 = glm::scale(modelBarril5, glm::vec3(1.0f, 1.0f, 1.0f));
+	modelBarrel.render(modelBarril5);
+	glEnable(GL_CULL_FACE);
+
+	//Barrel 6
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelBarril6 = glm::mat4(modelMatrixBarrel);
+	modelBarril6 = translate(modelBarril6, glm::vec3(54.68, 1.3, 63.67));
+	modelBarril6 = glm::rotate(modelBarril6, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	modelBarril6 = glm::scale(modelBarril6, glm::vec3(1.0f, 1.0f, 1.0f));
+	modelBarrel.render(modelBarril6);
+	glEnable(GL_CULL_FACE);
+
+	//Barrel 7
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelBarril7 = glm::mat4(modelMatrixBarrel);
+	modelBarril7 = translate(modelBarril7, glm::vec3(65.23, 1.3, 76.17));
+	modelBarril7 = glm::rotate(modelBarril7, glm::radians(-90.0f), glm::vec3(1, 0, 0));
+	modelBarril7 = glm::scale(modelBarril7, glm::vec3(1.0f, 1.0f, 1.0f));
+	modelBarrel.render(modelBarril7);
+	glEnable(GL_CULL_FACE);
+
+	//Rock2 1
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelRocktwo = glm::mat4(modelMatrixRock2);
+	modelRocktwo = translate(modelRocktwo, glm::vec3(0.78, 3.0, 17.57));
+	modelRocktwo = glm::scale(modelRocktwo, glm::vec3(0.08f, 0.08f, 0.08f));
+	modelRock2.render(modelRocktwo);
+	glEnable(GL_CULL_FACE);
+
+	//Rock2 2
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelRocktwo2 = glm::mat4(modelMatrixRock2);
+	modelRocktwo2 = translate(modelRocktwo2, glm::vec3(22.26, 3.0, -14.45));
+	modelRocktwo2 = glm::scale(modelRocktwo2, glm::vec3(0.08f, 0.08f, 0.08f));
+	modelRock2.render(modelRocktwo2);
+	glEnable(GL_CULL_FACE);
+
+	//Rock2 3
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelRocktwo3 = glm::mat4(modelMatrixRock2);
+	modelRocktwo3 = translate(modelRocktwo3, glm::vec3(-64.01, 3.0, 17.18));
+	modelRocktwo3 = glm::scale(modelRocktwo3, glm::vec3(0.08f, 0.08f, 0.08f));
+	modelRock2.render(modelRocktwo3);
+	glEnable(GL_CULL_FACE);
+
+	//Rock2 4
+	glDisable(GL_CULL_FACE);
+	glm::mat4 modelRocktwo4 = glm::mat4(modelMatrixRock2);
+	modelRocktwo4 = translate(modelRocktwo4, glm::vec3(70.43, 3.0, 26.95));
+	modelRocktwo4 = glm::scale(modelRocktwo4, glm::vec3(0.08f, 0.08f, 0.08f));
+	modelRock2.render(modelRocktwo4);
+	glEnable(GL_CULL_FACE);
+
+	//Wheels 1
 	glDisable(GL_CULL_FACE);
 	glm::mat4 model3Wheels = glm::mat4(modelMatrixThreeWheels);
-	model3Wheels = translate(model3Wheels, glm::vec3(3.0, 2.0, -3.0));
+	model3Wheels = translate(model3Wheels, glm::vec3((-16.01 - 1.4), 2.0, 1.95));
 	model3Wheels = glm::rotate(model3Wheels, glm::radians(-90.0f), glm::vec3(0, 0, 1));
 	model3Wheels = glm::scale(model3Wheels, glm::vec3(0.06f, 0.06f, 0.06f));
 	modelThreeWheels.render(model3Wheels);
 	glEnable(GL_CULL_FACE);
 
+	//Wheels 2
+	glDisable(GL_CULL_FACE);
+	glm::mat4 model3Wheels2 = glm::mat4(modelMatrixThreeWheels);
+	model3Wheels2 = translate(model3Wheels2, glm::vec3((65.23 - 1.4), 2.0, -41.01));
+	model3Wheels2 = glm::rotate(model3Wheels2, glm::radians(-90.0f), glm::vec3(0, 0, 1));
+	model3Wheels2 = glm::scale(model3Wheels2, glm::vec3(0.06f, 0.06f, 0.06f));
+	modelThreeWheels.render(model3Wheels2);
+	glEnable(GL_CULL_FACE);
+
+	//Wheels 3
+	glDisable(GL_CULL_FACE);
+	glm::mat4 model3Wheels3 = glm::mat4(modelMatrixThreeWheels);
+	model3Wheels3 = translate(model3Wheels3, glm::vec3((-30.46 - 1.4), 3.0, -70.31));
+	model3Wheels3 = glm::rotate(model3Wheels3, glm::radians(-90.0f), glm::vec3(0, 0, 1));
+	model3Wheels3 = glm::scale(model3Wheels3, glm::vec3(0.06f, 0.06f, 0.06f));
+	modelThreeWheels.render(model3Wheels3);
+	glEnable(GL_CULL_FACE);
+
+	//Wheels 4
+	glDisable(GL_CULL_FACE);
+	glm::mat4 model3Wheels4 = glm::mat4(modelMatrixThreeWheels);
+	model3Wheels4 = translate(model3Wheels4, glm::vec3((-60.54 - 1.4), 2.0, -28.90));
+	model3Wheels4 = glm::rotate(model3Wheels4, glm::radians(-90.0f), glm::vec3(0, 0, 1));
+	model3Wheels4 = glm::scale(model3Wheels4, glm::vec3(0.06f, 0.06f, 0.06f));
+	modelThreeWheels.render(model3Wheels4);
+	glEnable(GL_CULL_FACE);
+
+	//Wheels 5
+	glDisable(GL_CULL_FACE);
+	glm::mat4 model3Wheels5 = glm::mat4(modelMatrixThreeWheels);
+	model3Wheels5 = translate(model3Wheels5, glm::vec3((2.43 - 1.4), 2.5, 67.57));
+	model3Wheels5 = glm::rotate(model3Wheels5, glm::radians(-90.0f), glm::vec3(0, 0, 1));
+	model3Wheels5 = glm::scale(model3Wheels5, glm::vec3(0.06f, 0.06f, 0.06f));
+	modelThreeWheels.render(model3Wheels5);
+	glEnable(GL_CULL_FACE);
+
 	//Victory
 	glDisable(GL_CULL_FACE);
 	glm::mat4 modelVictory = glm::mat4(modelMatrixVictory);
-	modelVictory = translate(modelVictory, glm::vec3(-0.023515, 1.0, 12.446066));
+	modelVictory = translate(modelVictory, glm::vec3(13.28, 1.5, 1.95));
 	modelVictory = glm::scale(modelVictory, glm::vec3(0.02f, 0.02f, 0.02f));
 	victoryModelAnimate.render(modelVictory);
 	glEnable(GL_CULL_FACE);
-	
+
 	glDisable(GL_CULL_FACE);
-	glm::mat4 modelVictory2 = glm::mat4(modelMatrixVictory2);
-	modelVictory2 = translate(modelVictory2, glm::vec3(-0.023515, 1.0, 4.446066));
+	glm::mat4 modelVictory2 = glm::mat4(modelMatrixVictory);
+	modelVictory2 = translate(modelVictory2, glm::vec3(41.79, 1.5, 53.125));
 	modelVictory2 = glm::scale(modelVictory2, glm::vec3(0.02f, 0.02f, 0.02f));
-	victoryModelAnimate2.render(modelVictory2);
+	victoryModelAnimate.render(modelVictory2);
 	glEnable(GL_CULL_FACE);
 
 	glDisable(GL_CULL_FACE);
-	glm::mat4 modelVictory3 = glm::mat4(modelMatrixVictory3);
-	modelVictory3 = translate(modelVictory3, glm::vec3(-0.023515, 1.0, 8.446066));
+	glm::mat4 modelVictory3 = glm::mat4(modelMatrixVictory);
+	modelVictory3 = translate(modelVictory3, glm::vec3(-37.1, 1.5, 48.04));
 	modelVictory3 = glm::scale(modelVictory3, glm::vec3(0.02f, 0.02f, 0.02f));
-	victoryModelAnimate3.render(modelVictory3);
+	victoryModelAnimate.render(modelVictory3);
 	glEnable(GL_CULL_FACE);
 
-	//Rock2
 	glDisable(GL_CULL_FACE);
-	glm::mat4 modelRocktwo = glm::mat4(modelMatrixRock2);
-	modelRocktwo = translate(modelRocktwo, glm::vec3(1.023515, 1.0, 10.446066));
-	modelRocktwo = glm::scale(modelRocktwo, glm::vec3(0.08f, 0.08f, 0.08f));
-	modelRock2.render(modelRocktwo);
-
+	glm::mat4 modelVictory4 = glm::mat4(modelMatrixVictory);
+	modelVictory4 = translate(modelVictory4, glm::vec3(39.45, 1.5, -38.28));
+	modelVictory4 = glm::scale(modelVictory4, glm::vec3(0.02f, 0.02f, 0.02f));
+	victoryModelAnimate.render(modelVictory4);
 	glEnable(GL_CULL_FACE);
 
-	// Dart lego
-	// Se deshabilita el cull faces IMPORTANTE para la capa
 	glDisable(GL_CULL_FACE);
-	modelMatrixDart[3][1] = terrain.getHeightTerrain(modelMatrixDart[3][0], modelMatrixDart[3][2]);
-	glm::mat4 modelMatrixDartBody = glm::mat4(modelMatrixDart);
-	modelMatrixDartBody = glm::scale(modelMatrixDartBody, glm::vec3(0.5, 0.5, 0.5));
-	modelDartLegoBody.render(modelMatrixDartBody);
-	glm::mat4 modelMatrixDartHead = glm::mat4(modelMatrixDartBody);
-	modelMatrixDartHead = glm::rotate(modelMatrixDartHead, rotDartHead, glm::vec3(0, 1, 0));
-	modelDartLegoHead.render(modelMatrixDartHead);
-	modelDartLegoMask.render(modelMatrixDartHead);
-	glm::mat4 modelMatrixDartLeftArm = glm::mat4(modelMatrixDartBody);
-	modelMatrixDartLeftArm = glm::translate(modelMatrixDartLeftArm, glm::vec3(-0.023515, 2.43607, 0.446066));
-	modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, glm::radians(-5.0f), glm::vec3(1, 0, 0));
-	modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, rotDartLeftArm, glm::vec3(0, 0, 1));
-	modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, glm::radians(5.0f), glm::vec3(1, 0, 0));
-	modelMatrixDartLeftArm = glm::translate(modelMatrixDartLeftArm, glm::vec3(0.023515, -2.43607, -0.446066));
-	modelDartLegoLeftArm.render(modelMatrixDartLeftArm);
-	glm::mat4 modelMatrixDartLeftHand = glm::mat4(modelMatrixDartLeftArm);
-	modelMatrixDartLeftHand = glm::translate(modelMatrixDartLeftHand, glm::vec3(0.201343, 1.68317, 0.99774));
-	modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, glm::radians(-5.0f), glm::vec3(1, 0, 0));
-	modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, rotDartLeftHand, glm::vec3(0, 1, 0));
-	modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, glm::radians(5.0f), glm::vec3(1, 0, 0));
-	modelMatrixDartLeftHand = glm::translate(modelMatrixDartLeftHand, glm::vec3(-0.201343, -1.68317, -0.99774));
-	modelDartLegoLeftHand.render(modelMatrixDartLeftHand);
-	glm::mat4 modelMatrixDartRightArm = glm::mat4(modelMatrixDartBody);
-	modelMatrixDartRightArm = glm::translate(modelMatrixDartRightArm, glm::vec3(-0.023515, 2.43607, -0.446066));
-	modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, glm::radians(5.0f), glm::vec3(1, 0, 0));
-	modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, rotDartRightArm, glm::vec3(0, 0, 1));
-	modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, glm::radians(-5.0f), glm::vec3(1, 0, 0));
-	modelMatrixDartRightArm = glm::translate(modelMatrixDartRightArm, glm::vec3(0.023515, -2.43607, 0.446066));
-	modelDartLegoRightArm.render(modelMatrixDartRightArm);
-	glm::mat4 modelMatrixDartRightHand = glm::mat4(modelMatrixDartRightArm);
-	modelMatrixDartRightHand = glm::translate(modelMatrixDartRightHand, glm::vec3(0.201343, 1.68317, -0.99774));
-	modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, glm::radians(5.0f), glm::vec3(1, 0, 0));
-	modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, rotDartRightHand, glm::vec3(0, 1, 0));
-	modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, glm::radians(-5.0f), glm::vec3(1, 0, 0));
-	modelMatrixDartRightHand = glm::translate(modelMatrixDartRightHand, glm::vec3(-0.201343, -1.68317, 0.99774));
-	modelDartLegoRightHand.render(modelMatrixDartRightHand);
-	glm::mat4 modelMatrixDartLeftLeg = glm::mat4(modelMatrixDartBody);
-	modelMatrixDartLeftLeg = glm::translate(modelMatrixDartLeftLeg, glm::vec3(0, 1.12632, 0.423349));
-	modelMatrixDartLeftLeg = glm::rotate(modelMatrixDartLeftLeg, rotDartLeftLeg, glm::vec3(0, 0, 1));
-	modelMatrixDartLeftLeg = glm::translate(modelMatrixDartLeftLeg, glm::vec3(0, -1.12632, -0.423349));
-	modelDartLegoLeftLeg.render(modelMatrixDartLeftLeg);
-	glm::mat4 modelMatrixDartRightLeg = glm::mat4(modelMatrixDartBody);
-	modelMatrixDartRightLeg = glm::translate(modelMatrixDartRightLeg, glm::vec3(0, 1.12632, -0.423349));
-	modelMatrixDartRightLeg = glm::rotate(modelMatrixDartRightLeg, rotDartRightLeg, glm::vec3(0, 0, 1));
-	modelMatrixDartRightLeg = glm::translate(modelMatrixDartRightLeg, glm::vec3(0, -1.12632, 0.423349));
-	modelDartLegoRightLeg.render(modelMatrixDartRightLeg);
-	// Se regresa el cull faces IMPORTANTE para la capa
+	glm::mat4 modelVictory5 = glm::mat4(modelMatrixVictory);
+	modelVictory5 = translate(modelVictory5, glm::vec3(-22.65, 1.5, -84.76));
+	modelVictory5 = glm::scale(modelVictory5, glm::vec3(0.02f, 0.02f, 0.02f));
+	victoryModelAnimate.render(modelVictory5);
 	glEnable(GL_CULL_FACE);
+
+	//glDisable(GL_CULL_FACE);
+	//glm::mat4 modelVictory2 = glm::mat4(modelMatrixVictory2);
+	//modelVictory2 = translate(modelVictory2, glm::vec3(-0.023515, 1.0, 4.446066));
+	//modelVictory2 = glm::scale(modelVictory2, glm::vec3(0.02f, 0.02f, 0.02f));
+	//victoryModelAnimate2.render(modelVictory2);
+	//glEnable(GL_CULL_FACE);
+
+	//glDisable(GL_CULL_FACE);
+	//glm::mat4 modelVictory3 = glm::mat4(modelMatrixVictory3);
+	//modelVictory3 = translate(modelVictory3, glm::vec3(-0.023515, 1.0, 8.446066));
+	//modelVictory3 = glm::scale(modelVictory3, glm::vec3(0.02f, 0.02f, 0.02f));
+	//victoryModelAnimate3.render(modelVictory3);
+	//glEnable(GL_CULL_FACE);
+
+	//// Dart lego
+	//// Se deshabilita el cull faces IMPORTANTE para la capa
+	//glDisable(GL_CULL_FACE);
+	//modelMatrixDart[3][1] = terrain.getHeightTerrain(modelMatrixDart[3][0], modelMatrixDart[3][2]);
+	//glm::mat4 modelMatrixDartBody = glm::mat4(modelMatrixDart);
+	//modelMatrixDartBody = glm::scale(modelMatrixDartBody, glm::vec3(0.5, 0.5, 0.5));
+	//modelDartLegoBody.render(modelMatrixDartBody);
+	//glm::mat4 modelMatrixDartHead = glm::mat4(modelMatrixDartBody);
+	//modelMatrixDartHead = glm::rotate(modelMatrixDartHead, rotDartHead, glm::vec3(0, 1, 0));
+	//modelDartLegoHead.render(modelMatrixDartHead);
+	//modelDartLegoMask.render(modelMatrixDartHead);
+	//glm::mat4 modelMatrixDartLeftArm = glm::mat4(modelMatrixDartBody);
+	//modelMatrixDartLeftArm = glm::translate(modelMatrixDartLeftArm, glm::vec3(-0.023515, 2.43607, 0.446066));
+	//modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+	//modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, rotDartLeftArm, glm::vec3(0, 0, 1));
+	//modelMatrixDartLeftArm = glm::rotate(modelMatrixDartLeftArm, glm::radians(5.0f), glm::vec3(1, 0, 0));
+	//modelMatrixDartLeftArm = glm::translate(modelMatrixDartLeftArm, glm::vec3(0.023515, -2.43607, -0.446066));
+	//modelDartLegoLeftArm.render(modelMatrixDartLeftArm);
+	//glm::mat4 modelMatrixDartLeftHand = glm::mat4(modelMatrixDartLeftArm);
+	//modelMatrixDartLeftHand = glm::translate(modelMatrixDartLeftHand, glm::vec3(0.201343, 1.68317, 0.99774));
+	//modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+	//modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, rotDartLeftHand, glm::vec3(0, 1, 0));
+	//modelMatrixDartLeftHand = glm::rotate(modelMatrixDartLeftHand, glm::radians(5.0f), glm::vec3(1, 0, 0));
+	//modelMatrixDartLeftHand = glm::translate(modelMatrixDartLeftHand, glm::vec3(-0.201343, -1.68317, -0.99774));
+	//modelDartLegoLeftHand.render(modelMatrixDartLeftHand);
+	//glm::mat4 modelMatrixDartRightArm = glm::mat4(modelMatrixDartBody);
+	//modelMatrixDartRightArm = glm::translate(modelMatrixDartRightArm, glm::vec3(-0.023515, 2.43607, -0.446066));
+	//modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, glm::radians(5.0f), glm::vec3(1, 0, 0));
+	//modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, rotDartRightArm, glm::vec3(0, 0, 1));
+	//modelMatrixDartRightArm = glm::rotate(modelMatrixDartRightArm, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+	//modelMatrixDartRightArm = glm::translate(modelMatrixDartRightArm, glm::vec3(0.023515, -2.43607, 0.446066));
+	//modelDartLegoRightArm.render(modelMatrixDartRightArm);
+	//glm::mat4 modelMatrixDartRightHand = glm::mat4(modelMatrixDartRightArm);
+	//modelMatrixDartRightHand = glm::translate(modelMatrixDartRightHand, glm::vec3(0.201343, 1.68317, -0.99774));
+	//modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, glm::radians(5.0f), glm::vec3(1, 0, 0));
+	//modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, rotDartRightHand, glm::vec3(0, 1, 0));
+	//modelMatrixDartRightHand = glm::rotate(modelMatrixDartRightHand, glm::radians(-5.0f), glm::vec3(1, 0, 0));
+	//modelMatrixDartRightHand = glm::translate(modelMatrixDartRightHand, glm::vec3(-0.201343, -1.68317, 0.99774));
+	//modelDartLegoRightHand.render(modelMatrixDartRightHand);
+	//glm::mat4 modelMatrixDartLeftLeg = glm::mat4(modelMatrixDartBody);
+	//modelMatrixDartLeftLeg = glm::translate(modelMatrixDartLeftLeg, glm::vec3(0, 1.12632, 0.423349));
+	//modelMatrixDartLeftLeg = glm::rotate(modelMatrixDartLeftLeg, rotDartLeftLeg, glm::vec3(0, 0, 1));
+	//modelMatrixDartLeftLeg = glm::translate(modelMatrixDartLeftLeg, glm::vec3(0, -1.12632, -0.423349));
+	//modelDartLegoLeftLeg.render(modelMatrixDartLeftLeg);
+	//glm::mat4 modelMatrixDartRightLeg = glm::mat4(modelMatrixDartBody);
+	//modelMatrixDartRightLeg = glm::translate(modelMatrixDartRightLeg, glm::vec3(0, 1.12632, -0.423349));
+	//modelMatrixDartRightLeg = glm::rotate(modelMatrixDartRightLeg, rotDartRightLeg, glm::vec3(0, 0, 1));
+	//modelMatrixDartRightLeg = glm::translate(modelMatrixDartRightLeg, glm::vec3(0, -1.12632, 0.423349));
+	//modelDartLegoRightLeg.render(modelMatrixDartRightLeg);
+	//// Se regresa el cull faces IMPORTANTE para la capa
+	//glEnable(GL_CULL_FACE);
 
 	/*******************************************
 	 * Custom Anim objects obj
@@ -3547,7 +3906,7 @@ void renderScene(bool renderParticles){
 			 modelFireParticles = glm::translate(modelFireParticles, it->second.second);
 			 modelFireParticles[3][1] = terrain.getHeightTerrain(modelFireParticles[3][0], modelFireParticles[3][2]);
 			 //--------La lluvia sigue al modelo---------//
-			 glm::vec3 positionEmitter = glm::vec3(modelMatrixMayow[3]);
+			 glm::vec3 positionEmitter = glm::vec3(modelMatrixTerrenator[3]);
 			 positionEmitter.y = 10.0;
 			 shaderParticlesLluvia.setVectorFloat3("Emitter", glm::value_ptr(glm::vec3(positionEmitter)));
 			 //-------------//
