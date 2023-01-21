@@ -145,6 +145,7 @@ GLuint skyboxTextureID;
 GLuint texturaActivaID;
 
 bool iniciaPartida = false, presionarOpcion = false;
+bool ganaste = false;
 int seleccionTextura = 0;
 
 GLenum types[6] = {
@@ -1896,8 +1897,8 @@ void applicationLoop() {
 	modelMatrixTerrenator = glm::rotate(modelMatrixTerrenator, glm::radians(-90.0f), glm::vec3(0, 1, 0));
 	modelMatrixTerrenator = glm::translate(modelMatrixTerrenator, glm::vec3(20.0f, 2.0f, -10.0f));
 
-	//modelMatrixTerrenator = glm::rotate(modelMatrixMeta, glm::radians(-90.0f), glm::vec3(0, 1, 0));
-	modelMatrixMeta = glm::translate(modelMatrixMeta, glm::vec3(10.0f, 2.0f, -20.0f));
+	modelMatrixMeta = glm::rotate(modelMatrixMeta, glm::radians(-90.0f), glm::vec3(0, 1, 0));
+	modelMatrixMeta = glm::translate(modelMatrixMeta, glm::vec3(20.5f, 9.0f, -43.0f));
 
 	modelMatrixDart = glm::translate(modelMatrixDart, glm::vec3(3.0, 0.0, 20.0));
 
@@ -2491,14 +2492,14 @@ void applicationLoop() {
 			glm::vec3(modelMeta.getObb().c.x,
 				modelMeta.getObb().c.y - 0.8f,
 				modelMeta.getObb().c.z));
-		MetaCollider.e = modelMeta.getObb().e * glm::vec3(0.6, 0.5, 0.5);
+		MetaCollider.e = modelMeta.getObb().e * glm::vec3(2.0, 2.0, 2.0);
 		MetaCollider.c = glm::vec3(modelmatrixColliderMeta[3]);
 		addOrUpdateColliders(collidersOBB, "Meta", MetaCollider, modelMatrixMeta);
 
 		/*******************************************
 		 * Render de colliders
 		 *******************************************/
-		for (std::map<std::string, std::tuple<AbstractModel::OBB, glm::mat4, glm::mat4> >::iterator it =
+		/*for (std::map<std::string, std::tuple<AbstractModel::OBB, glm::mat4, glm::mat4> >::iterator it =
 				collidersOBB.begin(); it != collidersOBB.end(); it++) {
 			glm::mat4 matrixCollider = glm::mat4(1.0);
 			matrixCollider = glm::translate(matrixCollider, std::get<0>(it->second).c);
@@ -2517,7 +2518,7 @@ void applicationLoop() {
 			sphereCollider.setColor(glm::vec4(1.0, 1.0, 1.0, 1.0));
 			sphereCollider.enableWireMode();
 			sphereCollider.render(matrixCollider);
-		}
+		}*/
 
 		/*******************************************
 		 * Test Colisions
@@ -2535,7 +2536,12 @@ void applicationLoop() {
 					std::cout << "Colision " << it->first << " with "
 							<< jt->first << std::endl;
 					isCollision = true;
+					if ((it->first.compare("Terrenator") == 0) && (jt->first.compare("Meta") == 0)) {
+						ganaste = true;
+						vidas = 4;
+					}
 				}
+				
 				
 			}
 			if (it->first.compare("Terrenator") == 0 && isCollision == false) {
@@ -2602,19 +2608,18 @@ void applicationLoop() {
 				}
 				else {
 					if ((jt->first.compare("Terrenator") == 0) && iniciaPartida) {
-						/*if ((currTime - ultimoChoque) > 3.0f) {
-							ultimoChoque = currTime;
-							alSourcePlay(source[6]);
-							vidas = vidas - 1;
-						}*/
 						
-						if (sourcesPlay[6]) {
+						
+						if (sourcesPlay[6] && !ganaste) {
 							sourcesPlay[6] = false;
 							alSourcePlay(source[6]);
 							vidas = vidas - 1;
 						}
-						
+
 						modelMatrixTerrenator = std::get<1>(jt->second);
+						
+						
+						
 						
 					}
 				}
@@ -2635,6 +2640,9 @@ void applicationLoop() {
 
 		glEnable(GL_BLEND);
 		switch (vidas) {
+			case 4:
+				textLifeRender->render("                              GANASTE", 0.0, 0.0, 30.0, 1.0, 0.0, 0.0);
+				break;
 			case 3:
 				textLifeRender->render("                              Vidas: 3", 0.0, 0.0, 30.0, 1.0, 0.0, 0.0);
 				break;
@@ -2923,7 +2931,7 @@ void renderScene(bool renderParticles){
 	//Meta
 	glDisable(GL_CULL_FACE);
 	glm::mat4 modelMatrixMetaBody = glm::mat4(modelMatrixMeta);
-	//modelMatrixMetaBody = glm::scale(modelMatrixMetaBody, glm::vec3(0.5, 0.5, 0.5));
+	modelMatrixMetaBody = glm::scale(modelMatrixMetaBody, glm::vec3(2.0, 2.0, 2.0));
 	modelMeta.render(modelMatrixMetaBody);
 	glEnable(GL_CULL_FACE);
 
