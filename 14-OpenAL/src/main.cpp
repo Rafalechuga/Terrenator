@@ -156,12 +156,13 @@ GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
 GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
 GL_TEXTURE_CUBE_MAP_NEGATIVE_Z };
 
-std::string fileNames[6] = { "../Textures/mp_bloodvalley/blood-valley_ft.tga",
-		"../Textures/mp_bloodvalley/blood-valley_bk.tga",
-		"../Textures/mp_bloodvalley/blood-valley_up.tga",
-		"../Textures/mp_bloodvalley/blood-valley_dn.tga",
-		"../Textures/mp_bloodvalley/blood-valley_rt.tga",
-		"../Textures/mp_bloodvalley/blood-valley_lf.tga" };
+std::string fileNames[6] = {
+		"../Textures/ame_nebula/purplenebula_ft.tga",
+		"../Textures/ame_nebula/purplenebula_bk.tga",
+		"../Textures/ame_nebula/purplenebula_up.tga",
+		"../Textures/ame_nebula/purplenebula_dn.tga",
+		"../Textures/ame_nebula/purplenebula_rt.tga",
+		"../Textures/ame_nebula/purplenebula_lf.tga" };
 
 bool exitApp = false;
 int lastMousePosX, offsetX = 0;
